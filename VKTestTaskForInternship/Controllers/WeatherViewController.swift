@@ -12,6 +12,14 @@ class WeatherViewController: UIViewController, UICollectionViewDelegate, UIColle
     private let weatherTypes = WeatherType.allCases
     private let collectionView: UICollectionView
     private var weatherView: WeatherView?
+    private let toggleButton = UIButton()
+    private var isDay = true {
+        didSet {
+            updateBackground()
+            updateToggleButtonImage()
+            updateWeatherView()
+        }
+    }
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         // Создание layout для коллекции
@@ -37,15 +45,64 @@ class WeatherViewController: UIViewController, UICollectionViewDelegate, UIColle
         super.viewDidLoad()
         
         // Настройка вью
-        view.backgroundColor = .white
+        updateBackground()
         
         // Добавление и настройка collectionView
         collectionView.frame = CGRect(x: 0, y: 50, width: view.frame.width, height: 100)
         view.addSubview(collectionView)
         
+        // Настройка toggleButton
+        setupToggleButton()
+        
         // Отображение случайного погодного явления при старте
         let randomWeather = weatherTypes.randomElement()!
         presentWeather(for: randomWeather)
+    }
+    
+    private func setupToggleButton() {
+        toggleButton.translatesAutoresizingMaskIntoConstraints = false
+        toggleButton.addTarget(self, action: #selector(toggleButtonTapped(_:)), for: .touchUpInside)
+        updateToggleButtonImage()
+        view.addSubview(toggleButton)
+        
+        // Установка constraints для toggleButton
+        NSLayoutConstraint.activate([
+            toggleButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            toggleButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
+            toggleButton.widthAnchor.constraint(equalToConstant: 50),
+            toggleButton.heightAnchor.constraint(equalToConstant: 50)
+        ])
+    }
+    
+    private func updateToggleButtonImage() {
+        let image = isDay ? UIImage(named: "sun") : UIImage(named: "moon")
+        toggleButton.setImage(image, for: .normal)
+    }
+    
+    @objc private func toggleButtonTapped(_ sender: UIButton) {
+        isDay.toggle()
+    }
+    
+    private func updateBackground() {
+        let backgroundImage = isDay ? UIImage(resource: .day) : UIImage(resource: .night)
+        let backgroundImageView = UIImageView(frame: view.bounds)
+        backgroundImageView.image = backgroundImage
+        backgroundImageView.contentMode = .scaleAspectFill
+        backgroundImageView.clipsToBounds = true
+        
+        // Удаление предыдущего фона
+        if let existingBackgroundView = view.subviews.first(where: { $0 is UIImageView }) {
+            existingBackgroundView.removeFromSuperview()
+        }
+        
+        // Добавление нового фона
+        view.insertSubview(backgroundImageView, at: 0)
+    }
+    
+    private func updateWeatherView() {
+        if let currentWeatherType = weatherView?.weatherType {
+            presentWeather(for: currentWeatherType)
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -73,7 +130,7 @@ class WeatherViewController: UIViewController, UICollectionViewDelegate, UIColle
     
     private func presentWeather(for weatherType: WeatherType) {
         weatherView?.removeFromSuperview()
-        weatherView = WeatherView(frame: view.bounds, weatherType: weatherType)
+        weatherView = WeatherView(frame: view.bounds, weatherType: weatherType, isDay: isDay)
         if let weatherView = weatherView {
             view.insertSubview(weatherView, belowSubview: collectionView)
         }

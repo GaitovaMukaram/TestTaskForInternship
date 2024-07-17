@@ -12,17 +12,4 @@ enum WeatherType: String, CaseIterable {
     case rain = "Rain"
     case storm = "Storm"
     case fog = "Fog"
-    
-    var color: UIColor {
-        switch self {
-        case .sunny:
-            return .yellow
-        case .rain:
-            return .gray
-        case .storm:
-            return .darkGray
-        case .fog:
-            return .lightGray
-        }
-    }
 }

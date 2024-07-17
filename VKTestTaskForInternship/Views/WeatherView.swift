@@ -9,10 +9,12 @@ import UIKit
 
 class WeatherView: UIView {
     
-    private var weatherType: WeatherType?
+    var weatherType: WeatherType?
     private let weatherLabel = UILabel()
+    private var isDay: Bool
     
-    init(frame: CGRect, weatherType: WeatherType) {
+    init(frame: CGRect, weatherType: WeatherType, isDay: Bool) {
+        self.isDay = isDay
         super.init(frame: frame)
         self.weatherType = weatherType
         setupView()
@@ -24,7 +26,6 @@ class WeatherView: UIView {
     
     private func setupView() {
         guard let weatherType = weatherType else { return }
-        self.backgroundColor = weatherType.color
         weatherLabel.text = weatherType.rawValue
         weatherLabel.textAlignment = .center
         weatherLabel.font = UIFont.systemFont(ofSize: 32)
@@ -40,7 +41,7 @@ class WeatherView: UIView {
         
         switch weatherType {
         case .sunny:
-            animateSunny()
+            isDay ? animateSunny() : animateMoon()
         case .rain:
             animateRain()
         case .storm:
@@ -95,6 +96,39 @@ class WeatherView: UIView {
         rotateAnimation.duration = 5
         rotateAnimation.repeatCount = Float.infinity
         raysContainer.add(rotateAnimation, forKey: "rotate")
+    }
+
+    private func animateMoon() {
+        // Создание круга для луны
+        let moonLayer = CAShapeLayer()
+        let moonPath = UIBezierPath(arcCenter: CGPoint(x: bounds.midX, y: bounds.midY), radius: 50, startAngle: 0, endAngle: .pi * 2, clockwise: true)
+        moonLayer.path = moonPath.cgPath
+        moonLayer.fillColor = UIColor.yellow.cgColor
+        layer.addSublayer(moonLayer)
+        
+        // Создание контейнера для звезд
+        let starsContainer = CALayer()
+        starsContainer.frame = bounds
+        layer.addSublayer(starsContainer)
+        
+        // Создание звезд
+        let numberOfStars = 10
+        for _ in 0..<numberOfStars {
+            let starLayer = CAShapeLayer()
+            let starPath = UIBezierPath(arcCenter: CGPoint(x: CGFloat(arc4random_uniform(UInt32(bounds.width))), y: CGFloat(arc4random_uniform(UInt32(bounds.height)))), radius: 2, startAngle: 0, endAngle: .pi * 2, clockwise: true)
+            starLayer.path = starPath.cgPath
+            starLayer.fillColor = UIColor.white.cgColor
+            starsContainer.addSublayer(starLayer)
+        }
+        
+        // Анимация мигания звезд
+        let blinkAnimation = CABasicAnimation(keyPath: "opacity")
+        blinkAnimation.fromValue = 1.0
+        blinkAnimation.toValue = 0.0
+        blinkAnimation.duration = 0.5
+        blinkAnimation.autoreverses = true
+        blinkAnimation.repeatCount = Float.infinity
+        starsContainer.add(blinkAnimation, forKey: "blink")
     }
     
     private func animateRain() {
