@@ -194,19 +194,41 @@ class WeatherView: UIView {
     }
     
     private func animateFog() {
-        // Анимация тумана
-        let fogLayer = CAGradientLayer()
-        fogLayer.colors = [UIColor.white.withAlphaComponent(0.6).cgColor, UIColor.clear.cgColor]
-        fogLayer.frame = bounds
-        fogLayer.startPoint = CGPoint(x: 0, y: 0.5)
-        fogLayer.endPoint = CGPoint(x: 1, y: 0.5)
-        layer.addSublayer(fogLayer)
+        // Создание контейнера для слоев тумана
+        let fogContainer = CALayer()
+        fogContainer.frame = bounds
+        layer.addSublayer(fogContainer)
         
-        let fogAnimation = CABasicAnimation(keyPath: "transform.translation.x")
-        fogAnimation.fromValue = -bounds.width
-        fogAnimation.toValue = bounds.width
-        fogAnimation.duration = 10
-        fogAnimation.repeatCount = Float.infinity
-        fogLayer.add(fogAnimation, forKey: "fog")
+        // Создание слоев тумана
+        let numberOfFogLayers = 7
+        for i in 0..<numberOfFogLayers {
+            let fogLayer = CALayer()
+            
+            // Случайная густота тумана
+            let randomOpacity = CGFloat(arc4random_uniform(2) == 0 ? 0.8 : 0.2)
+            fogLayer.backgroundColor = UIColor.white.withAlphaComponent(randomOpacity).cgColor
+            let fogHeight = CGFloat(100)
+            let yOffset = CGFloat(arc4random_uniform(UInt32(bounds.midY))) // Случайное смещение от низа до середины экрана
+            fogLayer.frame = CGRect(x: -bounds.width, y: bounds.height - yOffset - fogHeight / 2, width: bounds.width * 2, height: fogHeight)
+            fogLayer.cornerRadius = fogHeight / 2
+            fogContainer.addSublayer(fogLayer)
+            
+            // Анимация движения тумана
+            let fogAnimation = CABasicAnimation(keyPath: "position.x")
+            fogAnimation.fromValue = -bounds.width
+            fogAnimation.toValue = bounds.width * 2
+            fogAnimation.duration = 10 + Double(i * 5)
+            fogAnimation.repeatCount = Float.infinity
+            fogLayer.add(fogAnimation, forKey: "fogMovement\(i)")
+            
+            // Анимация изменения прозрачности
+            let opacityAnimation = CABasicAnimation(keyPath: "opacity")
+            opacityAnimation.fromValue = randomOpacity
+            opacityAnimation.toValue = randomOpacity == 0.8 ? 0.8 : 0.5
+            opacityAnimation.duration = 10
+            opacityAnimation.autoreverses = true
+            opacityAnimation.repeatCount = Float.infinity
+            fogLayer.add(opacityAnimation, forKey: "fogOpacity\(i)")
+        }
     }
 }
