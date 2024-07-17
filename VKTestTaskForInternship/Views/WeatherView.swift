@@ -58,37 +58,43 @@ class WeatherView: UIView {
         sunLayer.fillColor = UIColor.orange.cgColor
         layer.addSublayer(sunLayer)
         
+        // Создание контейнера для лучей
+        let raysContainer = CALayer()
+        raysContainer.frame = bounds
+        layer.addSublayer(raysContainer)
+        
         // Создание лучей солнца
         let numberOfRays = 12
         let rayLength: CGFloat = 30
-        let rayWidth: CGFloat = 10
+        let raySpacing: CGFloat = 10 // Расстояние между кругом и лучами
         let center = CGPoint(x: bounds.midX, y: bounds.midY)
         
         for i in 0..<numberOfRays {
             let angle = CGFloat(i) * (.pi * 2 / CGFloat(numberOfRays))
-            let startX = center.x + cos(angle) * 50
-            let startY = center.y + sin(angle) * 50
-            let endX = center.x + cos(angle) * (50 + rayLength)
-            let endY = center.y + sin(angle) * (50 + rayLength)
+            
+            let startX = center.x + cos(angle) * (50 + raySpacing)
+            let startY = center.y + sin(angle) * (50 + raySpacing)
+            let endX = center.x + cos(angle) * (50 + raySpacing + rayLength)
+            let endY = center.y + sin(angle) * (50 + raySpacing + rayLength)
             
             let rayPath = UIBezierPath()
             rayPath.move(to: CGPoint(x: startX, y: startY))
             rayPath.addLine(to: CGPoint(x: endX, y: endY))
-            rayPath.lineWidth = rayWidth
             
             let rayLayer = CAShapeLayer()
             rayLayer.path = rayPath.cgPath
-            rayLayer.strokeColor = UIColor.yellow.cgColor
-            rayLayer.lineWidth = rayWidth
-            layer.addSublayer(rayLayer)
+            rayLayer.strokeColor = UIColor.orange.cgColor
+            rayLayer.lineWidth = 5
+            rayLayer.lineCap = .round
+            raysContainer.addSublayer(rayLayer)
         }
         
-        // Анимация вращения
+        // Анимация вращения лучей
         let rotateAnimation = CABasicAnimation(keyPath: "transform.rotation")
         rotateAnimation.toValue = NSNumber(value: Double.pi * 2)
         rotateAnimation.duration = 5
         rotateAnimation.repeatCount = Float.infinity
-        layer.add(rotateAnimation, forKey: "rotate")
+        raysContainer.add(rotateAnimation, forKey: "rotate")
     }
     
     private func animateRain() {
@@ -108,18 +114,49 @@ class WeatherView: UIView {
     }
     
     private func animateStorm() {
-        // Анимация грозы (молнии)
-        let lightning = UIView()
-        lightning.backgroundColor = .white
-        lightning.frame = bounds
-        lightning.alpha = 0.0
-        addSubview(lightning)
+        // Создание контейнера для молний
+        let lightningContainer = CALayer()
+        lightningContainer.frame = bounds
+        layer.addSublayer(lightningContainer)
         
-        UIView.animate(withDuration: 0.1, delay: 0, options: [.repeat, .autoreverse], animations: {
-            lightning.alpha = 1.0
-        }, completion: { _ in
-            lightning.alpha = 0.0
-        })
+        // Создание молний
+        let numberOfLightnings = 3
+        for _ in 0..<numberOfLightnings {
+            let lightningPath = UIBezierPath()
+            let startX = CGFloat(arc4random_uniform(UInt32(bounds.width)))
+            let startY: CGFloat = 0
+            lightningPath.move(to: CGPoint(x: startX, y: startY))
+            
+            // Создание зигзагообразного пути для молнии
+            let segments = 5
+            var previousPoint = CGPoint(x: startX, y: startY)
+            for _ in 0..<segments {
+                let randomX = CGFloat(arc4random_uniform(40)) - 20 // Случайное смещение по X
+                let randomY = CGFloat(arc4random_uniform(60)) + 20 // Случайное смещение по Y
+                let newPoint = CGPoint(x: previousPoint.x + randomX, y: previousPoint.y + randomY)
+                lightningPath.addLine(to: newPoint)
+                previousPoint = newPoint
+            }
+            
+            let lightningLayer = CAShapeLayer()
+            lightningLayer.path = lightningPath.cgPath
+            lightningLayer.strokeColor = UIColor.white.cgColor
+            lightningLayer.lineWidth = 2
+            lightningLayer.fillColor = UIColor.clear.cgColor
+            lightningLayer.lineCap = .round
+            lightningLayer.opacity = 0.0
+            lightningContainer.addSublayer(lightningLayer)
+            
+            // Анимация появления и исчезновения молнии
+            let fadeAnimation = CABasicAnimation(keyPath: "opacity")
+            fadeAnimation.fromValue = 1.0
+            fadeAnimation.toValue = 0.0
+            fadeAnimation.duration = 0.2
+            fadeAnimation.beginTime = CACurrentMediaTime() + CFTimeInterval(arc4random_uniform(3))
+            fadeAnimation.autoreverses = true
+            fadeAnimation.repeatCount = Float.infinity
+            lightningLayer.add(fadeAnimation, forKey: "fade")
+        }
     }
     
     private func animateFog() {
