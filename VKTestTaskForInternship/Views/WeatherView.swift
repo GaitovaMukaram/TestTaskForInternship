@@ -52,31 +52,31 @@ class WeatherView: UIView {
     }
     
     private func animateSunny() {
+        // Создание контейнера для солнца и лучей
+        let sunContainer = CALayer()
+        let sunCenter = CGPoint(x: bounds.midX, y: bounds.midY - 100)
+        sunContainer.position = sunCenter
+        layer.addSublayer(sunContainer)
+        
         // Создание круга для солнца
         let sunLayer = CAShapeLayer()
-        let sunPath = UIBezierPath(arcCenter: CGPoint(x: bounds.midX, y: bounds.midY), radius: 50, startAngle: 0, endAngle: .pi * 2, clockwise: true)
+        let sunPath = UIBezierPath(arcCenter: .zero, radius: 50, startAngle: 0, endAngle: .pi * 2, clockwise: true)
         sunLayer.path = sunPath.cgPath
         sunLayer.fillColor = UIColor.orange.cgColor
-        layer.addSublayer(sunLayer)
-        
-        // Создание контейнера для лучей
-        let raysContainer = CALayer()
-        raysContainer.frame = bounds
-        layer.addSublayer(raysContainer)
+        sunContainer.addSublayer(sunLayer)
         
         // Создание лучей солнца
         let numberOfRays = 12
         let rayLength: CGFloat = 30
         let raySpacing: CGFloat = 10 // Расстояние между кругом и лучами
-        let center = CGPoint(x: bounds.midX, y: bounds.midY)
         
         for i in 0..<numberOfRays {
             let angle = CGFloat(i) * (.pi * 2 / CGFloat(numberOfRays))
             
-            let startX = center.x + cos(angle) * (50 + raySpacing)
-            let startY = center.y + sin(angle) * (50 + raySpacing)
-            let endX = center.x + cos(angle) * (50 + raySpacing + rayLength)
-            let endY = center.y + sin(angle) * (50 + raySpacing + rayLength)
+            let startX = cos(angle) * (50 + raySpacing)
+            let startY = sin(angle) * (50 + raySpacing)
+            let endX = cos(angle) * (50 + raySpacing + rayLength)
+            let endY = sin(angle) * (50 + raySpacing + rayLength)
             
             let rayPath = UIBezierPath()
             rayPath.move(to: CGPoint(x: startX, y: startY))
@@ -87,7 +87,7 @@ class WeatherView: UIView {
             rayLayer.strokeColor = UIColor.orange.cgColor
             rayLayer.lineWidth = 5
             rayLayer.lineCap = .round
-            raysContainer.addSublayer(rayLayer)
+            sunContainer.addSublayer(rayLayer)
         }
         
         // Анимация вращения лучей
@@ -95,13 +95,13 @@ class WeatherView: UIView {
         rotateAnimation.toValue = NSNumber(value: Double.pi * 2)
         rotateAnimation.duration = 5
         rotateAnimation.repeatCount = Float.infinity
-        raysContainer.add(rotateAnimation, forKey: "rotate")
+        sunContainer.add(rotateAnimation, forKey: "rotate")
     }
-
+    
     private func animateMoon() {
         // Создание круга для луны
         let moonLayer = CAShapeLayer()
-        let moonPath = UIBezierPath(arcCenter: CGPoint(x: bounds.midX, y: bounds.midY), radius: 50, startAngle: 0, endAngle: .pi * 2, clockwise: true)
+        let moonPath = UIBezierPath(arcCenter: CGPoint(x: bounds.midX, y: bounds.midY - 100), radius: 50, startAngle: 0, endAngle: .pi * 2, clockwise: true)
         moonLayer.path = moonPath.cgPath
         moonLayer.fillColor = UIColor.yellow.cgColor
         layer.addSublayer(moonLayer)
@@ -112,12 +112,12 @@ class WeatherView: UIView {
         layer.addSublayer(starsContainer)
         
         // Создание звезд
-        let numberOfStars = 10
+        let numberOfStars = 30
         for _ in 0..<numberOfStars {
             let starLayer = CAShapeLayer()
-            let starPath = UIBezierPath(arcCenter: CGPoint(x: CGFloat(arc4random_uniform(UInt32(bounds.width))), y: CGFloat(arc4random_uniform(UInt32(bounds.height)))), radius: 2, startAngle: 0, endAngle: .pi * 2, clockwise: true)
+            let starPath = UIBezierPath(arcCenter: CGPoint(x: CGFloat(arc4random_uniform(UInt32(bounds.width))), y: CGFloat(arc4random_uniform(UInt32(bounds.midY)))), radius: 2, startAngle: 0, endAngle: .pi * 2, clockwise: true)
             starLayer.path = starPath.cgPath
-            starLayer.fillColor = UIColor.white.cgColor
+            starLayer.fillColor = UIColor.yellow.cgColor
             starsContainer.addSublayer(starLayer)
         }
         
@@ -133,7 +133,7 @@ class WeatherView: UIView {
     
     private func animateRain() {
         // Анимация дождя
-        for _ in 0..<20 {
+        for _ in 0..<50 {
             let drop = UIView()
             drop.backgroundColor = .blue
             drop.frame = CGRect(x: CGFloat(arc4random_uniform(UInt32(bounds.width))), y: -10, width: 2, height: 10)

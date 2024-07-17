@@ -75,7 +75,7 @@ class WeatherViewController: UIViewController, UICollectionViewDelegate, UIColle
     }
     
     private func updateToggleButtonImage() {
-        let image = isDay ? UIImage(named: "sun") : UIImage(named: "moon")
+        let image = isDay ? UIImage(named: "moon") : UIImage(named: "sun")
         toggleButton.setImage(image, for: .normal)
     }
     
