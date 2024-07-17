@@ -48,8 +48,18 @@ class WeatherViewController: UIViewController, UICollectionViewDelegate, UIColle
         updateBackground()
         
         // Добавление и настройка collectionView
-        collectionView.frame = CGRect(x: 0, y: 50, width: view.frame.width, height: 100)
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.backgroundColor = .clear
+        collectionView.showsHorizontalScrollIndicator = false
         view.addSubview(collectionView)
+        
+        // Установка constraints для collectionView
+        NSLayoutConstraint.activate([
+            collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            collectionView.heightAnchor.constraint(equalToConstant: 100)
+        ])
         
         // Настройка toggleButton
         setupToggleButton()
@@ -111,14 +121,49 @@ class WeatherViewController: UIViewController, UICollectionViewDelegate, UIColle
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
-        cell.backgroundColor = .blue
+        
+        // Удаление всех подвидов из contentView, чтобы избежать наложения
+        cell.contentView.subviews.forEach { $0.removeFromSuperview() }
+        
+        // Настройка иконки для ячейки
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFit
+        let iconName: String
+        switch weatherTypes[indexPath.item] {
+        case .clear:
+            iconName = "sun.max.fill"
+        case .rain:
+            iconName = "cloud.rain.fill"
+        case .storm:
+            iconName = "cloud.bolt.fill"
+        case .fog:
+            iconName = "cloud.fog.fill"
+        }
+        imageView.image = UIImage(systemName: iconName)
+        imageView.tintColor = .white
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        cell.contentView.addSubview(imageView)
         
         // Настройка текста для ячейки
-        let label = UILabel(frame: cell.contentView.frame)
+        let label = UILabel()
         label.text = weatherTypes[indexPath.item].rawValue
         label.textAlignment = .center
         label.textColor = .white
+        label.translatesAutoresizingMaskIntoConstraints = false
         cell.contentView.addSubview(label)
+        
+        // Установка constraints для иконки и текста
+        NSLayoutConstraint.activate([
+            imageView.topAnchor.constraint(equalTo: cell.contentView.topAnchor, constant: 10),
+            imageView.centerXAnchor.constraint(equalTo: cell.contentView.centerXAnchor),
+            imageView.widthAnchor.constraint(equalToConstant: 40),
+            imageView.heightAnchor.constraint(equalToConstant: 40),
+            
+            label.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 5),
+            label.leadingAnchor.constraint(equalTo: cell.contentView.leadingAnchor, constant: 5),
+            label.trailingAnchor.constraint(equalTo: cell.contentView.trailingAnchor, constant: -5),
+            label.bottomAnchor.constraint(equalTo: cell.contentView.bottomAnchor, constant: -10)
+        ])
         
         return cell
     }

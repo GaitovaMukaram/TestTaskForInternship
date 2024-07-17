@@ -10,7 +10,7 @@ import UIKit
 class WeatherView: UIView {
     
     var weatherType: WeatherType?
-    private let weatherLabel = UILabel()
+//    private let weatherLabel = UILabel()
     private var isDay: Bool
     
     init(frame: CGRect, weatherType: WeatherType, isDay: Bool) {
@@ -26,11 +26,11 @@ class WeatherView: UIView {
     
     private func setupView() {
         guard let weatherType = weatherType else { return }
-        weatherLabel.text = weatherType.rawValue
-        weatherLabel.textAlignment = .center
-        weatherLabel.font = UIFont.systemFont(ofSize: 32)
-        weatherLabel.frame = self.bounds
-        addSubview(weatherLabel)
+//        weatherLabel.text = weatherType.rawValue
+//        weatherLabel.textAlignment = .center
+//        weatherLabel.font = UIFont.systemFont(ofSize: 32)
+//        weatherLabel.frame = self.bounds
+//        addSubview(weatherLabel)
         
         // Анимация
         animateWeather()
@@ -40,7 +40,7 @@ class WeatherView: UIView {
         guard let weatherType = weatherType else { return }
         
         switch weatherType {
-        case .sunny:
+        case .clear:
             isDay ? animateSunny() : animateMoon()
         case .rain:
             animateRain()
@@ -191,6 +191,8 @@ class WeatherView: UIView {
             fadeAnimation.repeatCount = Float.infinity
             lightningLayer.add(fadeAnimation, forKey: "fade")
         }
+        
+        animateRain()
     }
     
     private func animateFog() {

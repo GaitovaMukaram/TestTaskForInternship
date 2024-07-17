@@ -8,8 +8,14 @@
 import UIKit
 
 enum WeatherType: String, CaseIterable {
-    case sunny = "Sunny"
+    case clear = "Clear"
     case rain = "Rain"
     case storm = "Storm"
     case fog = "Fog"
+    case cloudy = "Cloudy"
+    case snow = "Snow"
+    case wind = "Wind"
+    case overcast = "Overcast"
+    case blizzard = "Blizzard"
+    case tornado = "Tornado"
 }
