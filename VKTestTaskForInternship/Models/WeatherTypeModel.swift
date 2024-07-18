@@ -7,7 +7,6 @@
 
 import Foundation
 
-// Определение перечисления с raw-значениями и свойством для локализованных строк
 enum WeatherType: String, CaseIterable {
     case clear = "clear_label"
     case rain = "rain_label"
@@ -27,5 +26,25 @@ enum WeatherType: String, CaseIterable {
     
     var localizedString: String {
         return NSLocalizedString(self.rawValue, comment: "")
+    }
+    
+    var iconName: String {
+        switch self {
+        case .clear: return "sun.max.fill"
+        case .rain: return "cloud.rain.fill"
+        case .storm: return "cloud.bolt.fill"
+        case .stormAndRain: return "cloud.bolt.rain.fill"
+        case .fog: return "cloud.fog.fill"
+        case .cloudy: return "cloud.fill"
+        case .snow: return "snowflake"
+        case .wind: return "wind"
+        case .overcast: return "cloud.sun.fill"
+        case .blizzard: return "wind.snow"
+        case .rainAndSnow: return "cloud.sleet.fill"
+        case .partlyCloudy: return "cloud.sun.fill"
+        case .lightRain: return "cloud.sun.rain.fill"
+        case .hail: return "cloud.hail"
+        case .heavyRain: return "cloud.heavyrain.fill"
+        }
     }
 }
