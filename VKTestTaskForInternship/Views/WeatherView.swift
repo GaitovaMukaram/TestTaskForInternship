@@ -48,6 +48,18 @@ class WeatherView: UIView {
             animateStorm()
         case .fog:
             animateFog()
+        case .cloudy:
+            animateCloudy()
+        case .snow:
+            animateSnow()
+        case .wind:
+            animateWind()
+        case .overcast:
+            animateOvercast()
+        case .blizzard:
+            animateBlizzard()
+        case .tornado:
+            animateTornado()
         }
     }
     
@@ -232,5 +244,29 @@ class WeatherView: UIView {
             opacityAnimation.repeatCount = Float.infinity
             fogLayer.add(opacityAnimation, forKey: "fogOpacity\(i)")
         }
+    }
+    
+    private func animateCloudy() {
+        
+    }
+    
+    private func animateSnow() {
+        
+    }
+    
+    private func animateWind() {
+        
+    }
+    
+    private func animateOvercast() {
+        
+    }
+    
+    private func animateBlizzard() {
+        
+    }
+    
+    private func animateTornado() {
+        
     }
 }
