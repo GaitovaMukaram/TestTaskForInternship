@@ -66,6 +66,8 @@ class WeatherView: UIView {
             isDay ? animateLightRainSun() : animateLightRainMoon()
         case .hail:
             animateHail()
+        case .heavyRain:
+            animateHeavyRain()
         }
     }
     
@@ -299,11 +301,10 @@ class WeatherView: UIView {
         
         for _ in 0..<numberOfFlakes {
             // Создание снежинки
-            let snowflake = UIView()
-            snowflake.backgroundColor = .white
-            let flakeSize = CGFloat(arc4random_uniform(10) + 5)
+            let snowflake = UIImageView(image: UIImage(systemName: "snowflake"))
+            snowflake.tintColor = .white
+            let flakeSize = CGFloat(arc4random_uniform(10) + 15) // Размер снежинок от 15 до 25
             snowflake.frame = CGRect(x: CGFloat(arc4random_uniform(UInt32(bounds.width))), y: -flakeSize, width: flakeSize, height: flakeSize)
-            snowflake.layer.cornerRadius = flakeSize / 2
             addSubview(snowflake)
             
             // Анимация падения снежинки
@@ -529,5 +530,20 @@ class WeatherView: UIView {
     private func animateLightRainMoon() {
         animatePartlyCloudyMoon()
         animateRain()
+    }
+    
+    private func animateHeavyRain() {
+        for _ in 0..<450 {
+            let drop = UIView()
+            drop.backgroundColor = .blue
+            drop.frame = CGRect(x: CGFloat(arc4random_uniform(UInt32(bounds.width))), y: -10, width: 2, height: 10)
+            addSubview(drop)
+            
+            UIView.animate(withDuration: 1.0, delay: Double(arc4random_uniform(100)) / 100.0, options: [.repeat, .curveLinear], animations: {
+                drop.frame.origin.y = self.bounds.height
+            }, completion: { _ in
+                drop.removeFromSuperview()
+            })
+        }
     }
 }
