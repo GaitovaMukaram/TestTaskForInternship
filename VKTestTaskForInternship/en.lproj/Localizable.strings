@@ -5,3 +5,19 @@
   Created by Mukaram Gaitova on 18.07.2024.
   
 */
+
+"clear_label" = "Clear";
+"rain_label" = "Rain";
+"storm_label" = "Storm";
+"stormAndRain_label" = "Storm and Rain";
+"fog_label" = "Fog";
+"cloudy_label" = "Cloudy";
+"snow_label" = "Snow";
+"wind_label" = "Wind";
+"overcast_label" = "Overcast";
+"blizzard_label" = "Blizzard";
+"rainAndSnow_label" = "Rain and Snow";
+"partlyCloudy_label" = "Partly Cloudy";
+"hail_label" = "Hail";
+"heavyRain_label" = "Heavy Rain";
+"lightRain_label" = "Light Rain";

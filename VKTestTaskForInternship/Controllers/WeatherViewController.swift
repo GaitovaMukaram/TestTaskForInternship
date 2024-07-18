@@ -172,8 +172,11 @@ class WeatherViewController: UIViewController, UICollectionViewDelegate, UIColle
         
         // Настройка текста для ячейки
         let label = UILabel()
-        label.text = weatherTypes[indexPath.item].rawValue
+        label.text = weatherTypes[indexPath.item].localizedString
         label.textAlignment = .center
+        label.numberOfLines = 0
+        label.adjustsFontSizeToFitWidth = true
+        label.minimumScaleFactor = 0.5
         label.textColor = selectedIndexPath == indexPath ? .systemBlue : .white
         label.translatesAutoresizingMaskIntoConstraints = false
         cell.contentView.addSubview(label)

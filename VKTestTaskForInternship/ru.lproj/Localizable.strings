@@ -5,3 +5,19 @@
   Created by Mukaram Gaitova on 18.07.2024.
   
 */
+
+"clear_label" = "Ясно";
+"rain_label" = "Дождь";
+"storm_label" = "Гроза";
+"stormAndRain_label" = "Гроза и Дождь";
+"fog_label" = "Туман";
+"cloudy_label" = "Облачно";
+"snow_label" = "Снег";
+"wind_label" = "Ветер";
+"overcast_label" = "Пасмурно";
+"blizzard_label" = "Метель";
+"rainAndSnow_label" = "Дождь и Снег";
+"partlyCloudy_label" = "Переменная облачность";
+"hail_label" = "Град";
+"heavyRain_label" = "Сильный дождь";
+"lightRain_label" = "Легкий дождь";

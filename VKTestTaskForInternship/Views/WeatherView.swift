@@ -55,7 +55,7 @@ class WeatherView: UIView {
         case .wind:
             animateWind()
         case .overcast:
-            animateOvercast()
+            isDay ? animateOvercastSun() : animateOvercastMoon()
         case .blizzard:
             animateBlizzard()
         case .rainAndSnow:
@@ -406,8 +406,13 @@ class WeatherView: UIView {
         }
     }
     
-    private func animateOvercast() {
+    private func animateOvercastSun() {
         animateSunny()
+        animateCloudy()
+    }
+    
+    private func animateOvercastMoon() {
+        animateMoon()
         animateCloudy()
     }
     
