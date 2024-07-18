@@ -64,6 +64,8 @@ class WeatherView: UIView {
             isDay ? animatePartlyCloudySun() : animatePartlyCloudyMoon()
         case .lightRain:
             isDay ? animateLightRainSun() : animateLightRainMoon()
+        case .hail:
+            animateHail()
         }
     }
     
@@ -469,6 +471,59 @@ class WeatherView: UIView {
     private func animateLightRainSun() {
         animatePartlyCloudySun()
         animateRain()
+    }
+    
+    private func animateHail() {
+        // Создание облаков
+        let cloudLayer = CALayer()
+        cloudLayer.frame = CGRect(x: 0, y: bounds.midY - 150, width: bounds.width, height: 100)
+        layer.addSublayer(cloudLayer)
+        
+        let numberOfClouds = 3
+        for i in 0..<numberOfClouds {
+            let cloudPath = UIBezierPath()
+            let cloudWidth: CGFloat = 100
+            let cloudHeight: CGFloat = 60
+            let xOffset = CGFloat(i) * (cloudWidth + 20)
+            
+            cloudPath.move(to: CGPoint(x: xOffset, y: cloudLayer.bounds.midY))
+            cloudPath.addArc(withCenter: CGPoint(x: xOffset + cloudWidth * 0.2, y: cloudLayer.bounds.midY), radius: cloudWidth * 0.2, startAngle: 0, endAngle: .pi, clockwise: true)
+            cloudPath.addArc(withCenter: CGPoint(x: xOffset + cloudWidth * 0.5, y: cloudLayer.bounds.midY), radius: cloudWidth * 0.3, startAngle: 0, endAngle: .pi, clockwise: true)
+            cloudPath.addArc(withCenter: CGPoint(x: xOffset + cloudWidth * 0.8, y: cloudLayer.bounds.midY), radius: cloudWidth * 0.2, startAngle: 0, endAngle: .pi, clockwise: true)
+            cloudPath.close()
+            
+            let cloudShapeLayer = CAShapeLayer()
+            cloudShapeLayer.path = cloudPath.cgPath
+            cloudShapeLayer.fillColor = UIColor.lightGray.cgColor
+            cloudLayer.addSublayer(cloudShapeLayer)
+            
+            // Анимация движения облаков
+            let moveAnimation = CABasicAnimation(keyPath: "position.x")
+            moveAnimation.fromValue = cloudShapeLayer.position.x
+            moveAnimation.toValue = cloudShapeLayer.position.x + bounds.width
+            moveAnimation.duration = 10
+            moveAnimation.repeatCount = Float.infinity
+            moveAnimation.autoreverses = true
+            cloudShapeLayer.add(moveAnimation, forKey: "move")
+        }
+        
+        // Анимация града
+        let numberOfHailstones = 50
+        for _ in 0..<numberOfHailstones {
+            let hailstone = UIView()
+            hailstone.backgroundColor = .white
+            let hailstoneSize: CGFloat = CGFloat(arc4random_uniform(5) + 5) // Размер градин от 5 до 10
+            let randomXPosition = CGFloat(arc4random_uniform(UInt32(bounds.width)))
+            hailstone.frame = CGRect(x: randomXPosition, y: cloudLayer.frame.maxY, width: hailstoneSize, height: hailstoneSize)
+            hailstone.layer.cornerRadius = hailstoneSize / 2 // Делаем градину круглой
+            addSubview(hailstone)
+            
+            UIView.animate(withDuration: 1.0, delay: Double(arc4random_uniform(100)) / 100.0, options: [.repeat, .curveLinear], animations: {
+                hailstone.frame.origin.y = self.bounds.height
+            }, completion: { _ in
+                hailstone.removeFromSuperview()
+            })
+        }
     }
     
     private func animateLightRainMoon() {
