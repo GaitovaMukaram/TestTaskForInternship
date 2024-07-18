@@ -74,7 +74,7 @@ class WeatherViewController: UIViewController {
             toggleButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             toggleButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
             toggleButton.widthAnchor.constraint(equalToConstant: 100),
-            toggleButton.heightAnchor.constraint(equalToConstant: 50)
+            toggleButton.heightAnchor.constraint(equalToConstant: 45)
         ])
     }
     
