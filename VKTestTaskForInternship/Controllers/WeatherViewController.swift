@@ -49,6 +49,20 @@ class WeatherViewController: UIViewController, UICollectionViewDelegate, UIColle
         updateBackground()
         
         // Добавление и настройка collectionView
+        setupCollectionView()
+        
+        // Настройка toggleButton
+        setupToggleButton()
+        
+        // Отображение случайного погодного явления при старте
+        let randomIndex = Int.random(in: 0..<weatherTypes.count)
+        selectedIndexPath = IndexPath(item: randomIndex, section: 0)
+        let randomWeather = weatherTypes[randomIndex]
+        presentWeather(for: randomWeather)
+        collectionView.reloadData()
+    }
+    
+    private func setupCollectionView() {
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.backgroundColor = .clear
         collectionView.showsHorizontalScrollIndicator = false
@@ -61,16 +75,6 @@ class WeatherViewController: UIViewController, UICollectionViewDelegate, UIColle
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             collectionView.heightAnchor.constraint(equalToConstant: 100)
         ])
-        
-        // Настройка toggleButton
-        setupToggleButton()
-        
-        // Отображение случайного погодного явления при старте
-        let randomIndex = Int.random(in: 0..<weatherTypes.count)
-        selectedIndexPath = IndexPath(item: randomIndex, section: 0)
-        let randomWeather = weatherTypes[randomIndex]
-        presentWeather(for: randomWeather)
-        collectionView.reloadData()
     }
     
     private func setupToggleButton() {
@@ -165,6 +169,7 @@ class WeatherViewController: UIViewController, UICollectionViewDelegate, UIColle
         case .stormAndRain:
             iconName = "cloud.bolt.rain.fill"
         }
+        
         imageView.image = UIImage(systemName: iconName)
         imageView.tintColor = selectedIndexPath == indexPath ? .systemBlue : .white
         imageView.translatesAutoresizingMaskIntoConstraints = false

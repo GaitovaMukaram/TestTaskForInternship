@@ -7,13 +7,6 @@
 
 import Foundation
 
-// Расширение для локализации строк
-extension String {
-    var localized: String {
-        return NSLocalizedString(self, comment: "")
-    }
-}
-
 // Определение перечисления с raw-значениями и свойством для локализованных строк
 enum WeatherType: String, CaseIterable {
     case clear = "clear_label"
