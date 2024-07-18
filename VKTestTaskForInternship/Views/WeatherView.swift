@@ -68,6 +68,8 @@ class WeatherView: UIView {
             animateHail()
         case .heavyRain:
             animateHeavyRain()
+        case .stormAndRain:
+            animateStormAndRain()
         }
     }
     
@@ -168,6 +170,52 @@ class WeatherView: UIView {
     }
     
     private func animateStorm() {
+        // Создание контейнера для молний
+        let lightningContainer = CALayer()
+        lightningContainer.frame = bounds
+        layer.addSublayer(lightningContainer)
+        
+        // Создание молний
+        let numberOfLightnings = 3
+        for _ in 0..<numberOfLightnings {
+            let lightningPath = UIBezierPath()
+            let startX = CGFloat(arc4random_uniform(UInt32(bounds.width)))
+            let startY: CGFloat = 0
+            lightningPath.move(to: CGPoint(x: startX, y: startY))
+            
+            // Создание зигзагообразного пути для молнии
+            let segments = 5
+            var previousPoint = CGPoint(x: startX, y: startY)
+            for _ in 0..<segments {
+                let randomX = CGFloat(arc4random_uniform(40)) - 20 // Случайное смещение по X
+                let randomY = CGFloat(arc4random_uniform(60)) + 20 // Случайное смещение по Y
+                let newPoint = CGPoint(x: previousPoint.x + randomX, y: previousPoint.y + randomY)
+                lightningPath.addLine(to: newPoint)
+                previousPoint = newPoint
+            }
+            
+            let lightningLayer = CAShapeLayer()
+            lightningLayer.path = lightningPath.cgPath
+            lightningLayer.strokeColor = UIColor.white.cgColor
+            lightningLayer.lineWidth = 2
+            lightningLayer.fillColor = UIColor.clear.cgColor
+            lightningLayer.lineCap = .round
+            lightningLayer.opacity = 0.0
+            lightningContainer.addSublayer(lightningLayer)
+            
+            // Анимация появления и исчезновения молнии
+            let fadeAnimation = CABasicAnimation(keyPath: "opacity")
+            fadeAnimation.fromValue = 1.0
+            fadeAnimation.toValue = 0.0
+            fadeAnimation.duration = 0.2
+            fadeAnimation.beginTime = CACurrentMediaTime() + CFTimeInterval(arc4random_uniform(3))
+            fadeAnimation.autoreverses = true
+            fadeAnimation.repeatCount = Float.infinity
+            lightningLayer.add(fadeAnimation, forKey: "fade")
+        }
+    }
+    
+    private func animateStormAndRain() {
         // Создание контейнера для молний
         let lightningContainer = CALayer()
         lightningContainer.frame = bounds

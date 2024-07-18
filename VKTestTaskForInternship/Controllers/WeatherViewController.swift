@@ -158,6 +158,8 @@ class WeatherViewController: UIViewController, UICollectionViewDelegate, UIColle
             iconName = "cloud.hail"
         case .heavyRain:
             iconName = "cloud.heavyrain.fill"
+        case .stormAndRain:
+            iconName = "cloud.bolt.rain.fill"
         }
         imageView.image = UIImage(systemName: iconName)
         imageView.tintColor = .white
