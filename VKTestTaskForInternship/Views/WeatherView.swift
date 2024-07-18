@@ -294,8 +294,6 @@ class WeatherView: UIView {
         animateSnowflakes(count: 150, durationRange: 2...8, delayRange: 0...1, fallSpeed: 3, oscillationAmplitude: 60)
     }
     
-    
-    
     private func animateWind() {
         let windContainer = CALayer()
         windContainer.frame = bounds
@@ -306,7 +304,7 @@ class WeatherView: UIView {
         for pathIndex in 0..<numberOfPaths {
             DispatchQueue.main.asyncAfter(deadline: .now() + Double(pathIndex) * 0.5) {
                 let windPath = UIBezierPath()
-                let startY = CGFloat(arc4random_uniform(UInt32(self.bounds.height)))
+                let startY = CGFloat(arc4random_uniform(UInt32(self.bounds.height - 150)))
                 let direction = arc4random_uniform(2) == 0 ? 1 : -1
                 windPath.move(to: CGPoint(x: direction == 1 ? -50 : self.bounds.width + 50, y: startY))
                 
