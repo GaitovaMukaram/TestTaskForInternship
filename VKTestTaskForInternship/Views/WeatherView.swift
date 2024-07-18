@@ -444,7 +444,7 @@ class WeatherView: UIView {
         let numberOfClouds = 3
         for i in 0..<numberOfClouds {
             let cloudImageView = UIImageView(image: UIImage(systemName: "cloud.fill"))
-            cloudImageView.tintColor = .lightGray
+            cloudImageView.tintColor = .darkGray
             cloudImageView.alpha = 0.8
             cloudImageView.frame = CGRect(x: -120, y: CGFloat(arc4random_uniform(UInt32(bounds.midY - 200))), width: 120, height: 70)
             cloudsContainer.addSublayer(cloudImageView.layer)
@@ -453,7 +453,7 @@ class WeatherView: UIView {
             let cloudAnimation = CABasicAnimation(keyPath: "position.x")
             cloudAnimation.fromValue = -120
             cloudAnimation.toValue = bounds.width + 120
-            cloudAnimation.duration = 10 + Double(i * 5)
+            cloudAnimation.duration = 2 + Double(i * 5)
             cloudAnimation.repeatCount = Float.infinity
             cloudImageView.layer.add(cloudAnimation, forKey: "cloudMovement\(i)")
         }
@@ -475,7 +475,7 @@ class WeatherView: UIView {
             let fallAnimation = CABasicAnimation(keyPath: "position.y")
             fallAnimation.fromValue = hailstone.position.y
             fallAnimation.toValue = bounds.height
-            fallAnimation.duration = 1.0 + Double(arc4random_uniform(10)) / 10.0
+            fallAnimation.duration = 0.1 + Double(arc4random_uniform(10)) / 10.0
             fallAnimation.repeatCount = Float.infinity
             hailstone.add(fallAnimation, forKey: "fallingHailstone")
         }
