@@ -476,7 +476,7 @@ class WeatherView: UIView {
     private func animateHail() {
         // Создание облаков
         let cloudLayer = CALayer()
-        cloudLayer.frame = CGRect(x: 0, y: bounds.midY - 150, width: bounds.width, height: 100)
+        cloudLayer.frame = CGRect(x: 0, y: bounds.midY - 300, width: bounds.width, height: 100)
         layer.addSublayer(cloudLayer)
         
         let numberOfClouds = 3
