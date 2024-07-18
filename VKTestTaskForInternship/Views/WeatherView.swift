@@ -263,27 +263,11 @@ class WeatherView: UIView {
         // Создание слоев облаков
         let numberOfClouds = 7
         for i in 0..<numberOfClouds {
-            let cloudLayer = CAShapeLayer()
-            
-            // Путь для облака
-            let cloudPath = UIBezierPath()
-            cloudPath.move(to: CGPoint(x: 0, y: 50))
-            cloudPath.addArc(withCenter: CGPoint(x: 20, y: 50), radius: 20, startAngle: .pi, endAngle: 0, clockwise: true)
-            cloudPath.addArc(withCenter: CGPoint(x: 60, y: 50), radius: 30, startAngle: .pi, endAngle: 0, clockwise: true)
-            cloudPath.addArc(withCenter: CGPoint(x: 100, y: 50), radius: 20, startAngle: .pi, endAngle: 0, clockwise: true)
-            cloudPath.addLine(to: CGPoint(x: 120, y: 50))
-            cloudPath.addLine(to: CGPoint(x: 120, y: 70))
-            cloudPath.addLine(to: CGPoint(x: 0, y: 70))
-            cloudPath.close()
-            
-            cloudLayer.path = cloudPath.cgPath
-            
-            // Случайный выбор цвета для облака
-            let randomColor = arc4random_uniform(2) == 0 ? UIColor.white.cgColor : UIColor.lightGray.cgColor
-            cloudLayer.fillColor = randomColor
-            cloudLayer.opacity = 0.8
-            cloudLayer.frame = CGRect(x: -120, y: CGFloat(arc4random_uniform(UInt32(bounds.midY))), width: 120, height: 70)
-            cloudsContainer.addSublayer(cloudLayer)
+            let cloudImageView = UIImageView(image: UIImage(systemName: "cloud.fill"))
+            cloudImageView.tintColor = arc4random_uniform(2) == 0 ? .white : .lightGray
+            cloudImageView.alpha = 0.8
+            cloudImageView.frame = CGRect(x: -120, y: CGFloat(arc4random_uniform(UInt32(bounds.midY))), width: 120, height: 70)
+            cloudsContainer.addSublayer(cloudImageView.layer)
             
             // Анимация движения облаков
             let cloudAnimation = CABasicAnimation(keyPath: "position.x")
@@ -291,7 +275,7 @@ class WeatherView: UIView {
             cloudAnimation.toValue = bounds.width + 120
             cloudAnimation.duration = 10 + Double(i * 5)
             cloudAnimation.repeatCount = Float.infinity
-            cloudLayer.add(cloudAnimation, forKey: "cloudMovement\(i)")
+            cloudImageView.layer.add(cloudAnimation, forKey: "cloudMovement\(i)")
         }
     }
     
@@ -399,25 +383,11 @@ class WeatherView: UIView {
         // Создание слоев облаков
         let numberOfClouds = 5
         for i in 0..<numberOfClouds {
-            let cloudLayer = CAShapeLayer()
-            
-            // Путь для облака
-            let cloudPath = UIBezierPath()
-            cloudPath.move(to: CGPoint(x: 0, y: 50))
-            cloudPath.addArc(withCenter: CGPoint(x: 20, y: 50), radius: 20, startAngle: .pi, endAngle: 0, clockwise: true)
-            cloudPath.addArc(withCenter: CGPoint(x: 60, y: 50), radius: 30, startAngle: .pi, endAngle: 0, clockwise: true)
-            cloudPath.addArc(withCenter: CGPoint(x: 100, y: 50), radius: 20, startAngle: .pi, endAngle: 0, clockwise: true)
-            cloudPath.addLine(to: CGPoint(x: 120, y: 50))
-            cloudPath.addLine(to: CGPoint(x: 120, y: 70))
-            cloudPath.addLine(to: CGPoint(x: 0, y: 70))
-            cloudPath.close()
-            
-            cloudLayer.path = cloudPath.cgPath
-            
-            cloudLayer.fillColor = UIColor.white.cgColor
-            cloudLayer.opacity = 0.5
-            cloudLayer.frame = CGRect(x: -120, y: CGFloat(arc4random_uniform(UInt32(bounds.midY))), width: 120, height: 70)
-            cloudsContainer.addSublayer(cloudLayer)
+            let cloudImageView = UIImageView(image: UIImage(systemName: "cloud.fill"))
+            cloudImageView.tintColor = .white
+            cloudImageView.alpha = 0.5
+            cloudImageView.frame = CGRect(x: -120, y: CGFloat(arc4random_uniform(UInt32(bounds.midY))), width: 120, height: 70)
+            cloudsContainer.addSublayer(cloudImageView.layer)
             
             // Анимация движения облаков
             let cloudAnimation = CABasicAnimation(keyPath: "position.x")
@@ -425,10 +395,10 @@ class WeatherView: UIView {
             cloudAnimation.toValue = bounds.width + 120
             cloudAnimation.duration = 10 + Double(i * 5)
             cloudAnimation.repeatCount = Float.infinity
-            cloudLayer.add(cloudAnimation, forKey: "cloudMovement\(i)")
+            cloudImageView.layer.add(cloudAnimation, forKey: "cloudMovement\(i)")
         }
     }
-    
+
     private func animatePartlyCloudyMoon() {
         animateMoon()
         // Создание контейнера для облаков
@@ -439,25 +409,11 @@ class WeatherView: UIView {
         // Создание слоев облаков
         let numberOfClouds = 5
         for i in 0..<numberOfClouds {
-            let cloudLayer = CAShapeLayer()
-            
-            // Путь для облака
-            let cloudPath = UIBezierPath()
-            cloudPath.move(to: CGPoint(x: 0, y: 50))
-            cloudPath.addArc(withCenter: CGPoint(x: 20, y: 50), radius: 20, startAngle: .pi, endAngle: 0, clockwise: true)
-            cloudPath.addArc(withCenter: CGPoint(x: 60, y: 50), radius: 30, startAngle: .pi, endAngle: 0, clockwise: true)
-            cloudPath.addArc(withCenter: CGPoint(x: 100, y: 50), radius: 20, startAngle: .pi, endAngle: 0, clockwise: true)
-            cloudPath.addLine(to: CGPoint(x: 120, y: 50))
-            cloudPath.addLine(to: CGPoint(x: 120, y: 70))
-            cloudPath.addLine(to: CGPoint(x: 0, y: 70))
-            cloudPath.close()
-            
-            cloudLayer.path = cloudPath.cgPath
-            
-            cloudLayer.fillColor = UIColor.white.cgColor
-            cloudLayer.opacity = 0.5
-            cloudLayer.frame = CGRect(x: -120, y: CGFloat(arc4random_uniform(UInt32(bounds.midY))), width: 120, height: 70)
-            cloudsContainer.addSublayer(cloudLayer)
+            let cloudImageView = UIImageView(image: UIImage(systemName: "cloud.fill"))
+            cloudImageView.tintColor = .white
+            cloudImageView.alpha = 0.5
+            cloudImageView.frame = CGRect(x: -120, y: CGFloat(arc4random_uniform(UInt32(bounds.midY))), width: 120, height: 70)
+            cloudsContainer.addSublayer(cloudImageView.layer)
             
             // Анимация движения облаков
             let cloudAnimation = CABasicAnimation(keyPath: "position.x")
@@ -465,7 +421,7 @@ class WeatherView: UIView {
             cloudAnimation.toValue = bounds.width + 120
             cloudAnimation.duration = 10 + Double(i * 5)
             cloudAnimation.repeatCount = Float.infinity
-            cloudLayer.add(cloudAnimation, forKey: "cloudMovement\(i)")
+            cloudImageView.layer.add(cloudAnimation, forKey: "cloudMovement\(i)")
         }
     }
     
@@ -474,62 +430,55 @@ class WeatherView: UIView {
         animateRain()
     }
     
+    private func animateLightRainMoon() {
+        animatePartlyCloudyMoon()
+        animateRain()
+    }
+    
     private func animateHail() {
-        // Создание облаков
-        let cloudLayer = CALayer()
-        cloudLayer.frame = CGRect(x: 0, y: bounds.midY - 300, width: bounds.width, height: 100)
-        layer.addSublayer(cloudLayer)
+        // Создание контейнера для облаков
+        let cloudsContainer = CALayer()
+        cloudsContainer.frame = bounds
+        layer.addSublayer(cloudsContainer)
         
         let numberOfClouds = 3
         for i in 0..<numberOfClouds {
-            let cloudPath = UIBezierPath()
-            let cloudWidth: CGFloat = 100
-            let cloudHeight: CGFloat = 60
-            let xOffset = CGFloat(i) * (cloudWidth + 20)
-            
-            cloudPath.move(to: CGPoint(x: xOffset, y: cloudLayer.bounds.midY))
-            cloudPath.addArc(withCenter: CGPoint(x: xOffset + cloudWidth * 0.2, y: cloudLayer.bounds.midY), radius: cloudWidth * 0.2, startAngle: 0, endAngle: .pi, clockwise: true)
-            cloudPath.addArc(withCenter: CGPoint(x: xOffset + cloudWidth * 0.5, y: cloudLayer.bounds.midY), radius: cloudWidth * 0.3, startAngle: 0, endAngle: .pi, clockwise: true)
-            cloudPath.addArc(withCenter: CGPoint(x: xOffset + cloudWidth * 0.8, y: cloudLayer.bounds.midY), radius: cloudWidth * 0.2, startAngle: 0, endAngle: .pi, clockwise: true)
-            cloudPath.close()
-            
-            let cloudShapeLayer = CAShapeLayer()
-            cloudShapeLayer.path = cloudPath.cgPath
-            cloudShapeLayer.fillColor = UIColor.lightGray.cgColor
-            cloudLayer.addSublayer(cloudShapeLayer)
+            let cloudImageView = UIImageView(image: UIImage(systemName: "cloud.fill"))
+            cloudImageView.tintColor = .lightGray
+            cloudImageView.alpha = 0.8
+            cloudImageView.frame = CGRect(x: -120, y: CGFloat(arc4random_uniform(UInt32(bounds.midY - 200))), width: 120, height: 70)
+            cloudsContainer.addSublayer(cloudImageView.layer)
             
             // Анимация движения облаков
-            let moveAnimation = CABasicAnimation(keyPath: "position.x")
-            moveAnimation.fromValue = cloudShapeLayer.position.x
-            moveAnimation.toValue = cloudShapeLayer.position.x + bounds.width
-            moveAnimation.duration = 10
-            moveAnimation.repeatCount = Float.infinity
-            moveAnimation.autoreverses = true
-            cloudShapeLayer.add(moveAnimation, forKey: "move")
+            let cloudAnimation = CABasicAnimation(keyPath: "position.x")
+            cloudAnimation.fromValue = -120
+            cloudAnimation.toValue = bounds.width + 120
+            cloudAnimation.duration = 10 + Double(i * 5)
+            cloudAnimation.repeatCount = Float.infinity
+            cloudImageView.layer.add(cloudAnimation, forKey: "cloudMovement\(i)")
         }
         
         // Анимация града
         let numberOfHailstones = 50
         for _ in 0..<numberOfHailstones {
-            let hailstone = UIView()
-            hailstone.backgroundColor = .white
+            let hailstone = CAShapeLayer()
             let hailstoneSize: CGFloat = CGFloat(arc4random_uniform(5) + 5) // Размер градин от 5 до 10
             let randomXPosition = CGFloat(arc4random_uniform(UInt32(bounds.width)))
-            hailstone.frame = CGRect(x: randomXPosition, y: cloudLayer.frame.maxY, width: hailstoneSize, height: hailstoneSize)
-            hailstone.layer.cornerRadius = hailstoneSize / 2 // Делаем градину круглой
-            addSubview(hailstone)
             
-            UIView.animate(withDuration: 1.0, delay: Double(arc4random_uniform(100)) / 100.0, options: [.repeat, .curveLinear], animations: {
-                hailstone.frame.origin.y = self.bounds.height
-            }, completion: { _ in
-                hailstone.removeFromSuperview()
-            })
+            let hailstonePath = UIBezierPath(ovalIn: CGRect(x: 0, y: 0, width: hailstoneSize, height: hailstoneSize))
+            hailstone.path = hailstonePath.cgPath
+            hailstone.fillColor = UIColor.white.cgColor
+            hailstone.frame = CGRect(x: randomXPosition, y: CGFloat(arc4random_uniform(UInt32(bounds.midY - 200))), width: hailstoneSize, height: hailstoneSize)
+            layer.addSublayer(hailstone)
+            
+            // Анимация падения градин
+            let fallAnimation = CABasicAnimation(keyPath: "position.y")
+            fallAnimation.fromValue = hailstone.position.y
+            fallAnimation.toValue = bounds.height
+            fallAnimation.duration = 1.0 + Double(arc4random_uniform(10)) / 10.0
+            fallAnimation.repeatCount = Float.infinity
+            hailstone.add(fallAnimation, forKey: "fallingHailstone")
         }
-    }
-    
-    private func animateLightRainMoon() {
-        animatePartlyCloudyMoon()
-        animateRain()
     }
     
     private func animateHeavyRain() {
