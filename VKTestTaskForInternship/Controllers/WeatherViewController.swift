@@ -75,14 +75,16 @@ class WeatherViewController: UIViewController {
         NSLayoutConstraint.activate([
             toggleButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             toggleButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
-            toggleButton.widthAnchor.constraint(equalToConstant: 50),
+            toggleButton.widthAnchor.constraint(equalToConstant: 100),
             toggleButton.heightAnchor.constraint(equalToConstant: 50)
         ])
     }
     
     private func updateToggleButtonImage() {
-        let image = isDay ? UIImage(named: "moon") : UIImage(named: "sun")
-        toggleButton.setImage(image, for: .normal)
+        UIView.transition(with: toggleButton, duration: 0.1, options: .transitionCrossDissolve, animations: {
+            let image = self.isDay ? UIImage(named: "moon") : UIImage(named: "sun")
+            self.toggleButton.setImage(image, for: .normal)
+        }, completion: nil)
     }
     
     @objc private func toggleButtonTapped(_ sender: UIButton) {
