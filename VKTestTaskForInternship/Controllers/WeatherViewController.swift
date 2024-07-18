@@ -13,6 +13,7 @@ class WeatherViewController: UIViewController, UICollectionViewDelegate, UIColle
     private let collectionView: UICollectionView
     private var weatherView: WeatherView?
     private let toggleButton = UIButton()
+    private var selectedIndexPath: IndexPath?
     private var isDay = true {
         didSet {
             updateBackground()
@@ -65,8 +66,11 @@ class WeatherViewController: UIViewController, UICollectionViewDelegate, UIColle
         setupToggleButton()
         
         // Отображение случайного погодного явления при старте
-        let randomWeather = weatherTypes.randomElement()!
+        let randomIndex = Int.random(in: 0..<weatherTypes.count)
+        selectedIndexPath = IndexPath(item: randomIndex, section: 0)
+        let randomWeather = weatherTypes[randomIndex]
         presentWeather(for: randomWeather)
+        collectionView.reloadData()
     }
     
     private func setupToggleButton() {
@@ -162,7 +166,7 @@ class WeatherViewController: UIViewController, UICollectionViewDelegate, UIColle
             iconName = "cloud.bolt.rain.fill"
         }
         imageView.image = UIImage(systemName: iconName)
-        imageView.tintColor = .white
+        imageView.tintColor = selectedIndexPath == indexPath ? .systemBlue : .white
         imageView.translatesAutoresizingMaskIntoConstraints = false
         cell.contentView.addSubview(imageView)
         
@@ -170,7 +174,7 @@ class WeatherViewController: UIViewController, UICollectionViewDelegate, UIColle
         let label = UILabel()
         label.text = weatherTypes[indexPath.item].rawValue
         label.textAlignment = .center
-        label.textColor = .white
+        label.textColor = selectedIndexPath == indexPath ? .systemBlue : .white
         label.translatesAutoresizingMaskIntoConstraints = false
         cell.contentView.addSubview(label)
         
@@ -191,6 +195,8 @@ class WeatherViewController: UIViewController, UICollectionViewDelegate, UIColle
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        selectedIndexPath = indexPath
+        collectionView.reloadData()
         let selectedWeather = weatherTypes[indexPath.item]
         presentWeather(for: selectedWeather)
     }

@@ -15,6 +15,7 @@
 		9F6482422C484BE600628F18 /* WeatherTypeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F6482412C484BE600628F18 /* WeatherTypeModel.swift */; };
 		9F6482442C484C5700628F18 /* WeatherView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F6482432C484C5700628F18 /* WeatherView.swift */; };
 		9F6482462C484C8E00628F18 /* WeatherViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F6482452C484C8E00628F18 /* WeatherViewController.swift */; };
+		9F6482512C48CCD400628F18 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9F64824F2C48CCD400628F18 /* Localizable.strings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,9 @@
 		9F6482412C484BE600628F18 /* WeatherTypeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherTypeModel.swift; sourceTree = "<group>"; };
 		9F6482432C484C5700628F18 /* WeatherView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherView.swift; sourceTree = "<group>"; };
 		9F6482452C484C8E00628F18 /* WeatherViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherViewController.swift; sourceTree = "<group>"; };
+		9F64824E2C48CC8400628F18 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		9F6482502C48CCD400628F18 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		9F6482522C48CCFD00628F18 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,6 +70,7 @@
 				9F6482272C483F6100628F18 /* AppDelegate.swift */,
 				9F6482292C483F6100628F18 /* SceneDelegate.swift */,
 				9F6482332C483F6200628F18 /* Assets.xcassets */,
+				9F64824F2C48CCD400628F18 /* Localizable.strings */,
 				9F6482352C483F6200628F18 /* LaunchScreen.storyboard */,
 				9F6482382C483F6200628F18 /* Info.plist */,
 				9F6482302C483F6100628F18 /* VKTestTaskForInternship.xcdatamodeld */,
@@ -139,6 +144,7 @@
 			knownRegions = (
 				en,
 				Base,
+				ru,
 			);
 			mainGroup = 9F64821B2C483F6100628F18;
 			productRefGroup = 9F6482252C483F6100628F18 /* Products */;
@@ -156,6 +162,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9F6482342C483F6200628F18 /* Assets.xcassets in Resources */,
+				9F6482512C48CCD400628F18 /* Localizable.strings in Resources */,
 				9F6482372C483F6200628F18 /* Base in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -183,8 +190,18 @@
 			isa = PBXVariantGroup;
 			children = (
 				9F6482362C483F6200628F18 /* Base */,
+				9F64824E2C48CC8400628F18 /* ru */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		9F64824F2C48CCD400628F18 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				9F6482502C48CCD400628F18 /* en */,
+				9F6482522C48CCFD00628F18 /* ru */,
+			);
+			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -195,6 +212,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -258,6 +276,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
