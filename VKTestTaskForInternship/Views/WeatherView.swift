@@ -10,7 +10,6 @@ import UIKit
 class WeatherView: UIView {
     
     var weatherType: WeatherType?
-//    private let weatherLabel = UILabel()
     private var isDay: Bool
     
     init(frame: CGRect, weatherType: WeatherType, isDay: Bool) {
@@ -26,13 +25,6 @@ class WeatherView: UIView {
     
     private func setupView() {
         guard weatherType != nil else { return }
-//        weatherLabel.text = weatherType.rawValue
-//        weatherLabel.textAlignment = .center
-//        weatherLabel.font = UIFont.systemFont(ofSize: 32)
-//        weatherLabel.frame = self.bounds
-//        addSubview(weatherLabel)
-        
-        // Анимация
         animateWeather()
     }
     
@@ -43,13 +35,13 @@ class WeatherView: UIView {
         case .clear:
             isDay ? animateSunny() : animateMoon()
         case .rain:
-            animateRain()
+            animateRain(countDrops: 50)
         case .storm:
             animateStorm()
         case .fog:
             animateFog()
         case .cloudy:
-            animateCloudy()
+            animateCloudy(numberOfClouds: 10, tintColor: [UIColor.white, UIColor.lightGray], duration: 10)
         case .snow:
             animateSnow()
         case .wind:
@@ -153,9 +145,9 @@ class WeatherView: UIView {
         starsContainer.add(blinkAnimation, forKey: "blink")
     }
     
-    private func animateRain() {
+    private func animateRain(countDrops: Int) {
         // Анимация дождя
-        for _ in 0..<50 {
+        for _ in 0..<countDrops {
             let drop = UIView()
             drop.backgroundColor = .blue
             drop.frame = CGRect(x: CGFloat(arc4random_uniform(UInt32(bounds.width))), y: -10, width: 2, height: 10)
@@ -216,51 +208,8 @@ class WeatherView: UIView {
     }
     
     private func animateStormAndRain() {
-        // Создание контейнера для молний
-        let lightningContainer = CALayer()
-        lightningContainer.frame = bounds
-        layer.addSublayer(lightningContainer)
-        
-        // Создание молний
-        let numberOfLightnings = 3
-        for _ in 0..<numberOfLightnings {
-            let lightningPath = UIBezierPath()
-            let startX = CGFloat(arc4random_uniform(UInt32(bounds.width)))
-            let startY: CGFloat = 0
-            lightningPath.move(to: CGPoint(x: startX, y: startY))
-            
-            // Создание зигзагообразного пути для молнии
-            let segments = 5
-            var previousPoint = CGPoint(x: startX, y: startY)
-            for _ in 0..<segments {
-                let randomX = CGFloat(arc4random_uniform(40)) - 20 // Случайное смещение по X
-                let randomY = CGFloat(arc4random_uniform(60)) + 20 // Случайное смещение по Y
-                let newPoint = CGPoint(x: previousPoint.x + randomX, y: previousPoint.y + randomY)
-                lightningPath.addLine(to: newPoint)
-                previousPoint = newPoint
-            }
-            
-            let lightningLayer = CAShapeLayer()
-            lightningLayer.path = lightningPath.cgPath
-            lightningLayer.strokeColor = UIColor.white.cgColor
-            lightningLayer.lineWidth = 2
-            lightningLayer.fillColor = UIColor.clear.cgColor
-            lightningLayer.lineCap = .round
-            lightningLayer.opacity = 0.0
-            lightningContainer.addSublayer(lightningLayer)
-            
-            // Анимация появления и исчезновения молнии
-            let fadeAnimation = CABasicAnimation(keyPath: "opacity")
-            fadeAnimation.fromValue = 1.0
-            fadeAnimation.toValue = 0.0
-            fadeAnimation.duration = 0.2
-            fadeAnimation.beginTime = CACurrentMediaTime() + CFTimeInterval(arc4random_uniform(3))
-            fadeAnimation.autoreverses = true
-            fadeAnimation.repeatCount = Float.infinity
-            lightningLayer.add(fadeAnimation, forKey: "fade")
-        }
-        
-        animateRain()
+        animateStorm()
+        animateRain(countDrops: 50)
     }
     
     private func animateFog() {
@@ -302,17 +251,16 @@ class WeatherView: UIView {
         }
     }
     
-    private func animateCloudy() {
+    private func animateCloudy(numberOfClouds: Int, tintColor: [UIColor], duration : Double) {
         // Создание контейнера для облаков
         let cloudsContainer = CALayer()
         cloudsContainer.frame = bounds
         layer.addSublayer(cloudsContainer)
         
         // Создание слоев облаков
-        let numberOfClouds = 7
         for i in 0..<numberOfClouds {
             let cloudImageView = UIImageView(image: UIImage(systemName: "cloud.fill"))
-            cloudImageView.tintColor = arc4random_uniform(2) == 0 ? .white : .lightGray
+            cloudImageView.tintColor = tintColor.randomElement()
             cloudImageView.alpha = 0.8
             cloudImageView.frame = CGRect(x: -120, y: CGFloat(arc4random_uniform(UInt32(bounds.midY))), width: 120, height: 70)
             cloudsContainer.addSublayer(cloudImageView.layer)
@@ -321,7 +269,7 @@ class WeatherView: UIView {
             let cloudAnimation = CABasicAnimation(keyPath: "position.x")
             cloudAnimation.fromValue = -120
             cloudAnimation.toValue = bounds.width + 120
-            cloudAnimation.duration = 10 + Double(i * 5)
+            cloudAnimation.duration = duration + Double(i * 5)
             cloudAnimation.repeatCount = Float.infinity
             cloudImageView.layer.add(cloudAnimation, forKey: "cloudMovement\(i)")
         }
@@ -408,12 +356,12 @@ class WeatherView: UIView {
     
     private func animateOvercastSun() {
         animateSunny()
-        animateCloudy()
+        animateCloudy(numberOfClouds: 7, tintColor: [UIColor.white, UIColor.lightGray], duration: 10)
     }
     
     private func animateOvercastMoon() {
         animateMoon()
-        animateCloudy()
+        animateCloudy(numberOfClouds: 7, tintColor: [UIColor.white, UIColor.lightGray], duration: 10)
     }
     
     private func animateBlizzard() {
@@ -422,97 +370,36 @@ class WeatherView: UIView {
     }
     
     private func animateRainAndSnow() {
-        animateRain()
+        animateRain(countDrops: 50)
         animateSnow()
     }
     
     private func animatePartlyCloudySun() {
         animateSunny()
-        // Создание контейнера для облаков
-        let cloudsContainer = CALayer()
-        cloudsContainer.frame = bounds
-        layer.addSublayer(cloudsContainer)
-        
-        // Создание слоев облаков
-        let numberOfClouds = 5
-        for i in 0..<numberOfClouds {
-            let cloudImageView = UIImageView(image: UIImage(systemName: "cloud.fill"))
-            cloudImageView.tintColor = .white
-            cloudImageView.alpha = 0.5
-            cloudImageView.frame = CGRect(x: -120, y: CGFloat(arc4random_uniform(UInt32(bounds.midY))), width: 120, height: 70)
-            cloudsContainer.addSublayer(cloudImageView.layer)
-            
-            // Анимация движения облаков
-            let cloudAnimation = CABasicAnimation(keyPath: "position.x")
-            cloudAnimation.fromValue = -120
-            cloudAnimation.toValue = bounds.width + 120
-            cloudAnimation.duration = 10 + Double(i * 5)
-            cloudAnimation.repeatCount = Float.infinity
-            cloudImageView.layer.add(cloudAnimation, forKey: "cloudMovement\(i)")
-        }
+        animateCloudy(numberOfClouds: 5, tintColor: [UIColor.white], duration: 10)
     }
 
     private func animatePartlyCloudyMoon() {
         animateMoon()
-        // Создание контейнера для облаков
-        let cloudsContainer = CALayer()
-        cloudsContainer.frame = bounds
-        layer.addSublayer(cloudsContainer)
-        
-        // Создание слоев облаков
-        let numberOfClouds = 5
-        for i in 0..<numberOfClouds {
-            let cloudImageView = UIImageView(image: UIImage(systemName: "cloud.fill"))
-            cloudImageView.tintColor = .white
-            cloudImageView.alpha = 0.5
-            cloudImageView.frame = CGRect(x: -120, y: CGFloat(arc4random_uniform(UInt32(bounds.midY))), width: 120, height: 70)
-            cloudsContainer.addSublayer(cloudImageView.layer)
-            
-            // Анимация движения облаков
-            let cloudAnimation = CABasicAnimation(keyPath: "position.x")
-            cloudAnimation.fromValue = -120
-            cloudAnimation.toValue = bounds.width + 120
-            cloudAnimation.duration = 10 + Double(i * 5)
-            cloudAnimation.repeatCount = Float.infinity
-            cloudImageView.layer.add(cloudAnimation, forKey: "cloudMovement\(i)")
-        }
+        animateCloudy(numberOfClouds: 5, tintColor: [UIColor.white], duration: 10)
     }
     
     private func animateLightRainSun() {
         animatePartlyCloudySun()
-        animateRain()
+        animateRain(countDrops: 50)
     }
     
     private func animateLightRainMoon() {
         animatePartlyCloudyMoon()
-        animateRain()
+        animateRain(countDrops: 50)
     }
     
     private func animateHail() {
         // Создание контейнера для облаков
-        let cloudsContainer = CALayer()
-        cloudsContainer.frame = bounds
-        layer.addSublayer(cloudsContainer)
-        
-        let numberOfClouds = 3
-        for i in 0..<numberOfClouds {
-            let cloudImageView = UIImageView(image: UIImage(systemName: "cloud.fill"))
-            cloudImageView.tintColor = .darkGray
-            cloudImageView.alpha = 0.8
-            cloudImageView.frame = CGRect(x: -120, y: CGFloat(arc4random_uniform(UInt32(bounds.midY - 200))), width: 120, height: 70)
-            cloudsContainer.addSublayer(cloudImageView.layer)
-            
-            // Анимация движения облаков
-            let cloudAnimation = CABasicAnimation(keyPath: "position.x")
-            cloudAnimation.fromValue = -120
-            cloudAnimation.toValue = bounds.width + 120
-            cloudAnimation.duration = 5 + Double(i * 5)
-            cloudAnimation.repeatCount = Float.infinity
-            cloudImageView.layer.add(cloudAnimation, forKey: "cloudMovement\(i)")
-        }
+        animateCloudy(numberOfClouds: 3, tintColor: [UIColor.darkGray], duration: 7)
         
         // Анимация града
-        let numberOfHailstones = 50
+        let numberOfHailstones = 20
         for _ in 0..<numberOfHailstones {
             let hailstone = CAShapeLayer()
             let hailstoneSize: CGFloat = CGFloat(arc4random_uniform(5) + 5) // Размер градин от 5 до 10
@@ -535,17 +422,6 @@ class WeatherView: UIView {
     }
     
     private func animateHeavyRain() {
-        for _ in 0..<450 {
-            let drop = UIView()
-            drop.backgroundColor = .blue
-            drop.frame = CGRect(x: CGFloat(arc4random_uniform(UInt32(bounds.width))), y: -10, width: 2, height: 10)
-            addSubview(drop)
-            
-            UIView.animate(withDuration: 1.0, delay: Double(arc4random_uniform(100)) / 100.0, options: [.repeat, .curveLinear], animations: {
-                drop.frame.origin.y = self.bounds.height
-            }, completion: { _ in
-                drop.removeFromSuperview()
-            })
-        }
+        animateRain(countDrops: 450)
     }
 }
