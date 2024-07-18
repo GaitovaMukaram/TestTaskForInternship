@@ -288,7 +288,36 @@ class WeatherView: UIView {
     }
     
     private func animateSnow() {
+        // Количество снежинок
+        let numberOfFlakes = 50
         
+        for _ in 0..<numberOfFlakes {
+            // Создание снежинки
+            let snowflake = UIView()
+            snowflake.backgroundColor = .white
+            let flakeSize = CGFloat(arc4random_uniform(10) + 5)
+            snowflake.frame = CGRect(x: CGFloat(arc4random_uniform(UInt32(bounds.width))), y: -flakeSize, width: flakeSize, height: flakeSize)
+            snowflake.layer.cornerRadius = flakeSize / 2
+            addSubview(snowflake)
+            
+            // Анимация падения снежинки
+            let fallDuration = TimeInterval(arc4random_uniform(10) + 5)
+            let delay = TimeInterval(arc4random_uniform(10)) / 10.0
+            UIView.animate(withDuration: fallDuration, delay: delay, options: [.repeat, .curveLinear], animations: {
+                snowflake.frame.origin.y = self.bounds.height
+            }, completion: { _ in
+                snowflake.removeFromSuperview()
+            })
+            
+            // Анимация горизонтального колебания
+            let oscillation = CABasicAnimation(keyPath: "position.x")
+            oscillation.duration = 2
+            oscillation.fromValue = snowflake.center.x - 20
+            oscillation.toValue = snowflake.center.x + 20
+            oscillation.repeatCount = Float.infinity
+            oscillation.autoreverses = true
+            snowflake.layer.add(oscillation, forKey: "oscillation")
+        }
     }
     
     private func animateWind() {
@@ -296,7 +325,8 @@ class WeatherView: UIView {
     }
     
     private func animateOvercast() {
-        
+        animateSunny()
+        animateCloudy()
     }
     
     private func animateBlizzard() {
