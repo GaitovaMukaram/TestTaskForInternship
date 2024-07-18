@@ -60,6 +60,10 @@ class WeatherView: UIView {
             animateBlizzard()
         case .rainAndSnow:
             animateRainAndSnow()
+        case .partlyCloudy:
+            isDay ? animatePartlyCloudySun() : animatePartlyCloudyMoon()
+        case .lightRain:
+            isDay ? animateLightRainSun() : animateLightRainMoon()
         }
     }
     
@@ -382,4 +386,93 @@ class WeatherView: UIView {
         animateSnow()
     }
     
+    private func animatePartlyCloudySun() {
+        animateSunny()
+        // Создание контейнера для облаков
+        let cloudsContainer = CALayer()
+        cloudsContainer.frame = bounds
+        layer.addSublayer(cloudsContainer)
+        
+        // Создание слоев облаков
+        let numberOfClouds = 5
+        for i in 0..<numberOfClouds {
+            let cloudLayer = CAShapeLayer()
+            
+            // Путь для облака
+            let cloudPath = UIBezierPath()
+            cloudPath.move(to: CGPoint(x: 0, y: 50))
+            cloudPath.addArc(withCenter: CGPoint(x: 20, y: 50), radius: 20, startAngle: .pi, endAngle: 0, clockwise: true)
+            cloudPath.addArc(withCenter: CGPoint(x: 60, y: 50), radius: 30, startAngle: .pi, endAngle: 0, clockwise: true)
+            cloudPath.addArc(withCenter: CGPoint(x: 100, y: 50), radius: 20, startAngle: .pi, endAngle: 0, clockwise: true)
+            cloudPath.addLine(to: CGPoint(x: 120, y: 50))
+            cloudPath.addLine(to: CGPoint(x: 120, y: 70))
+            cloudPath.addLine(to: CGPoint(x: 0, y: 70))
+            cloudPath.close()
+            
+            cloudLayer.path = cloudPath.cgPath
+            
+            cloudLayer.fillColor = UIColor.white.cgColor
+            cloudLayer.opacity = 0.5
+            cloudLayer.frame = CGRect(x: -120, y: CGFloat(arc4random_uniform(UInt32(bounds.midY))), width: 120, height: 70)
+            cloudsContainer.addSublayer(cloudLayer)
+            
+            // Анимация движения облаков
+            let cloudAnimation = CABasicAnimation(keyPath: "position.x")
+            cloudAnimation.fromValue = -120
+            cloudAnimation.toValue = bounds.width + 120
+            cloudAnimation.duration = 10 + Double(i * 5)
+            cloudAnimation.repeatCount = Float.infinity
+            cloudLayer.add(cloudAnimation, forKey: "cloudMovement\(i)")
+        }
+    }
+    
+    private func animatePartlyCloudyMoon() {
+        animateMoon()
+        // Создание контейнера для облаков
+        let cloudsContainer = CALayer()
+        cloudsContainer.frame = bounds
+        layer.addSublayer(cloudsContainer)
+        
+        // Создание слоев облаков
+        let numberOfClouds = 5
+        for i in 0..<numberOfClouds {
+            let cloudLayer = CAShapeLayer()
+            
+            // Путь для облака
+            let cloudPath = UIBezierPath()
+            cloudPath.move(to: CGPoint(x: 0, y: 50))
+            cloudPath.addArc(withCenter: CGPoint(x: 20, y: 50), radius: 20, startAngle: .pi, endAngle: 0, clockwise: true)
+            cloudPath.addArc(withCenter: CGPoint(x: 60, y: 50), radius: 30, startAngle: .pi, endAngle: 0, clockwise: true)
+            cloudPath.addArc(withCenter: CGPoint(x: 100, y: 50), radius: 20, startAngle: .pi, endAngle: 0, clockwise: true)
+            cloudPath.addLine(to: CGPoint(x: 120, y: 50))
+            cloudPath.addLine(to: CGPoint(x: 120, y: 70))
+            cloudPath.addLine(to: CGPoint(x: 0, y: 70))
+            cloudPath.close()
+            
+            cloudLayer.path = cloudPath.cgPath
+            
+            cloudLayer.fillColor = UIColor.white.cgColor
+            cloudLayer.opacity = 0.5
+            cloudLayer.frame = CGRect(x: -120, y: CGFloat(arc4random_uniform(UInt32(bounds.midY))), width: 120, height: 70)
+            cloudsContainer.addSublayer(cloudLayer)
+            
+            // Анимация движения облаков
+            let cloudAnimation = CABasicAnimation(keyPath: "position.x")
+            cloudAnimation.fromValue = -120
+            cloudAnimation.toValue = bounds.width + 120
+            cloudAnimation.duration = 10 + Double(i * 5)
+            cloudAnimation.repeatCount = Float.infinity
+            cloudLayer.add(cloudAnimation, forKey: "cloudMovement\(i)")
+        }
+    }
+    
+    private func animateLightRainSun() {
+        animatePartlyCloudySun()
+        animateRain()
+    }
+    
+    private func animateLightRainMoon() {
+        animatePartlyCloudyMoon()
+        animateRain()
+    }
 }
