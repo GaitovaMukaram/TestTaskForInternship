@@ -330,23 +330,23 @@ class WeatherView: UIView {
         let numberOfLines = 5
         
         for i in 0..<numberOfLines {
-            // Создание линии ветра
             let windLayer = CAShapeLayer()
             let windPath = UIBezierPath()
             
-            // Путь для линии ветра (волнистая линия)
-            let startX = CGFloat(arc4random_uniform(UInt32(bounds.width)))
-            let startY = CGFloat(arc4random_uniform(UInt32(bounds.height / 2)))
+            // Путь для линии ветра (прямые линии с кривыми)
+            var startX = CGFloat(-50)
+            let startY = CGFloat(arc4random_uniform(UInt32(bounds.height)))
             windPath.move(to: CGPoint(x: startX, y: startY))
             
-            let waveLength: CGFloat = 50
-            let waveHeight: CGFloat = 10
+            let waveLength: CGFloat = 100
+            let waveHeight: CGFloat = 20
             
-            for j in 0..<Int(bounds.width / waveLength) {
-                let endPointX = startX + waveLength * CGFloat(j + 1)
-                let controlPoint1 = CGPoint(x: startX + waveLength * CGFloat(j) + waveLength / 2, y: startY - waveHeight)
-                let controlPoint2 = CGPoint(x: startX + waveLength * CGFloat(j) + waveLength / 2, y: startY + waveHeight)
-                windPath.addCurve(to: CGPoint(x: endPointX, y: startY), controlPoint1: controlPoint1, controlPoint2: controlPoint2)
+            // Создаем волнистую линию
+            for _ in 0..<5 {
+                let controlPoint1 = CGPoint(x: startX + waveLength / 2, y: startY - waveHeight)
+                let controlPoint2 = CGPoint(x: startX + waveLength / 2, y: startY + waveHeight)
+                windPath.addCurve(to: CGPoint(x: startX + waveLength, y: startY), controlPoint1: controlPoint1, controlPoint2: controlPoint2)
+                startX += waveLength
             }
             
             windLayer.path = windPath.cgPath
@@ -354,12 +354,13 @@ class WeatherView: UIView {
             windLayer.lineWidth = 2
             windLayer.fillColor = UIColor.clear.cgColor
             windLayer.lineCap = .round
+            windLayer.opacity = 0.5
             windContainer.addSublayer(windLayer)
             
             // Анимация движения ветра
             let windAnimation = CABasicAnimation(keyPath: "position.x")
             windAnimation.fromValue = -bounds.width
-            windAnimation.toValue = bounds.width + bounds.width
+            windAnimation.toValue = bounds.width
             windAnimation.duration = 5 + Double(i * 2)
             windAnimation.repeatCount = Float.infinity
             windLayer.add(windAnimation, forKey: "windMovement\(i)")
