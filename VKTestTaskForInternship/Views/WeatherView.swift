@@ -25,7 +25,7 @@ class WeatherView: UIView {
     }
     
     private func setupView() {
-        guard let weatherType = weatherType else { return }
+        guard weatherType != nil else { return }
 //        weatherLabel.text = weatherType.rawValue
 //        weatherLabel.textAlignment = .center
 //        weatherLabel.font = UIFont.systemFont(ofSize: 32)
@@ -247,7 +247,44 @@ class WeatherView: UIView {
     }
     
     private func animateCloudy() {
+        // Создание контейнера для облаков
+        let cloudsContainer = CALayer()
+        cloudsContainer.frame = bounds
+        layer.addSublayer(cloudsContainer)
         
+        // Создание слоев облаков
+        let numberOfClouds = 7
+        for i in 0..<numberOfClouds {
+            let cloudLayer = CAShapeLayer()
+            
+            // Путь для облака
+            let cloudPath = UIBezierPath()
+            cloudPath.move(to: CGPoint(x: 0, y: 50))
+            cloudPath.addArc(withCenter: CGPoint(x: 20, y: 50), radius: 20, startAngle: .pi, endAngle: 0, clockwise: true)
+            cloudPath.addArc(withCenter: CGPoint(x: 60, y: 50), radius: 30, startAngle: .pi, endAngle: 0, clockwise: true)
+            cloudPath.addArc(withCenter: CGPoint(x: 100, y: 50), radius: 20, startAngle: .pi, endAngle: 0, clockwise: true)
+            cloudPath.addLine(to: CGPoint(x: 120, y: 50))
+            cloudPath.addLine(to: CGPoint(x: 120, y: 70))
+            cloudPath.addLine(to: CGPoint(x: 0, y: 70))
+            cloudPath.close()
+            
+            cloudLayer.path = cloudPath.cgPath
+            
+            // Случайный выбор цвета для облака
+            let randomColor = arc4random_uniform(2) == 0 ? UIColor.white.cgColor : UIColor.lightGray.cgColor
+            cloudLayer.fillColor = randomColor
+            cloudLayer.opacity = 0.8
+            cloudLayer.frame = CGRect(x: -120, y: CGFloat(arc4random_uniform(UInt32(bounds.midY))), width: 120, height: 70)
+            cloudsContainer.addSublayer(cloudLayer)
+            
+            // Анимация движения облаков
+            let cloudAnimation = CABasicAnimation(keyPath: "position.x")
+            cloudAnimation.fromValue = -120
+            cloudAnimation.toValue = bounds.width + 120
+            cloudAnimation.duration = 10 + Double(i * 5)
+            cloudAnimation.repeatCount = Float.infinity
+            cloudLayer.add(cloudAnimation, forKey: "cloudMovement\(i)")
+        }
     }
     
     private func animateSnow() {
