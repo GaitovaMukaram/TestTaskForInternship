@@ -17,5 +17,5 @@ enum WeatherType: String, CaseIterable {
     case wind = "Wind"
     case overcast = "Overcast"
     case blizzard = "Blizzard"
-    case tornado = "Tornado"
+    case rainAndSnow = "Rain and Snow"
 }

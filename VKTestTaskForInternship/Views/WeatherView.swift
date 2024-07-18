@@ -58,8 +58,8 @@ class WeatherView: UIView {
             animateOvercast()
         case .blizzard:
             animateBlizzard()
-        case .tornado:
-            animateTornado()
+        case .rainAndSnow:
+            animateRainAndSnow()
         }
     }
     
@@ -377,7 +377,9 @@ class WeatherView: UIView {
         animateWind()
     }
     
-    private func animateTornado() {
-        
+    private func animateRainAndSnow() {
+        animateRain()
+        animateSnow()
     }
+    
 }
