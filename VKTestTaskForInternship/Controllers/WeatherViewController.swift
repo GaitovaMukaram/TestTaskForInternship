@@ -45,11 +45,8 @@ class WeatherViewController: UIViewController {
         updateBackground()
         setupCollectionView()
         setupToggleButton()
+        randomPresentWeather()
         
-        let randomIndex = Int.random(in: 0..<weatherTypes.count)
-        selectedIndexPath = IndexPath(item: randomIndex, section: 0)
-        presentWeather(for: weatherTypes[randomIndex])
-        collectionView.reloadData()
     }
     
     private func setupCollectionView() {
@@ -103,6 +100,13 @@ class WeatherViewController: UIViewController {
         }
         
         view.insertSubview(backgroundImageView, at: 0)
+    }
+    
+    private func randomPresentWeather() {
+        let randomIndex = Int.random(in: 0..<weatherTypes.count)
+        selectedIndexPath = IndexPath(item: randomIndex, section: 0)
+        presentWeather(for: weatherTypes[randomIndex])
+        collectionView.reloadData()
     }
     
     private func updateWeatherView() {
