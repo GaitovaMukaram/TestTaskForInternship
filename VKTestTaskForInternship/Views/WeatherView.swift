@@ -279,7 +279,7 @@ class WeatherView: UIView {
             })
             
             let oscillation = CABasicAnimation(keyPath: "position.x")
-            oscillation.duration = 2
+            oscillation.duration = 20
             oscillation.fromValue = snowflake.center.x - 20
             oscillation.toValue = snowflake.center.x + 20
             oscillation.repeatCount = Float.infinity
@@ -292,41 +292,57 @@ class WeatherView: UIView {
         let windContainer = CALayer()
         windContainer.frame = bounds
         layer.addSublayer(windContainer)
-        
+
         let numberOfLines = 5
-        
+
         for i in 0..<numberOfLines {
-            let windLayer = CAShapeLayer()
             let windPath = UIBezierPath()
-            
+
             var startX = CGFloat(-50)
             let startY = CGFloat(arc4random_uniform(UInt32(bounds.height)))
             windPath.move(to: CGPoint(x: startX, y: startY))
-            
+
             let waveLength: CGFloat = 100
             let waveHeight: CGFloat = 20
-            
+
             for _ in 0..<5 {
                 let controlPoint1 = CGPoint(x: startX + waveLength / 2, y: startY - waveHeight)
                 let controlPoint2 = CGPoint(x: startX + waveLength / 2, y: startY + waveHeight)
                 windPath.addCurve(to: CGPoint(x: startX + waveLength, y: startY), controlPoint1: controlPoint1, controlPoint2: controlPoint2)
                 startX += waveLength
             }
-            
-            windLayer.path = windPath.cgPath
-            windLayer.strokeColor = UIColor.white.cgColor
-            windLayer.lineWidth = 2
-            windLayer.fillColor = UIColor.clear.cgColor
-            windLayer.lineCap = .round
-            windLayer.opacity = 0.5
-            windContainer.addSublayer(windLayer)
-            
-            let windAnimation = CABasicAnimation(keyPath: "position.x")
-            windAnimation.fromValue = -bounds.width
-            windAnimation.toValue = bounds.width
-            windAnimation.duration = 5 + Double(i * 2)
-            windAnimation.repeatCount = Float.infinity
-            windLayer.add(windAnimation, forKey: "windMovement\(i)")
+
+            // Создание анимации листьев
+            let leafImageView = UIImageView(image: UIImage(systemName: "leaf.fill"))
+            leafImageView.tintColor = .green
+            leafImageView.frame = CGRect(x: -50, y: startY, width: 30, height: 30)
+            leafImageView.contentMode = .scaleAspectFit
+            windContainer.addSublayer(leafImageView.layer)
+
+            // Анимация движения листьев по пути ветра
+            let leafAnimation = CAKeyframeAnimation(keyPath: "position")
+            leafAnimation.path = windPath.cgPath
+            leafAnimation.duration = 5 + Double(i * 2)
+            leafAnimation.repeatCount = Float.infinity
+            leafImageView.layer.add(leafAnimation, forKey: "leafMovement\(i)")
+
+            // Создание анимации песчинок
+            let numberOfDustParticles = 50
+            for _ in 0..<numberOfDustParticles {
+                let dustParticle = UIView()
+                dustParticle.backgroundColor = .brown
+                let particleSize: CGFloat = CGFloat(arc4random_uniform(3) + 2)
+                dustParticle.frame = CGRect(x: -particleSize, y: CGFloat(arc4random_uniform(UInt32(bounds.height))), width: particleSize, height: particleSize)
+                dustParticle.layer.cornerRadius = particleSize / 2
+                addSubview(dustParticle)
+
+                // Анимация движения песчинок по волнистому пути
+                let dustAnimation = CAKeyframeAnimation(keyPath: "position")
+                dustAnimation.path = windPath.cgPath
+                dustAnimation.duration = 5 + Double(arc4random_uniform(5))
+                dustAnimation.repeatCount = Float.infinity
+                dustParticle.layer.add(dustAnimation, forKey: "dustMovement\(i)")
+            }
         }
     }
     
@@ -342,7 +358,7 @@ class WeatherView: UIView {
     
     private func animateBlizzard() {
         animateSnow()
-        animateWind()
+//        animateWind()
     }
     
     private func animateRainAndSnow() {
