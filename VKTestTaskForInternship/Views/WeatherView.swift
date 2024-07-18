@@ -453,7 +453,7 @@ class WeatherView: UIView {
             let cloudAnimation = CABasicAnimation(keyPath: "position.x")
             cloudAnimation.fromValue = -120
             cloudAnimation.toValue = bounds.width + 120
-            cloudAnimation.duration = 2 + Double(i * 5)
+            cloudAnimation.duration = 5 + Double(i * 5)
             cloudAnimation.repeatCount = Float.infinity
             cloudImageView.layer.add(cloudAnimation, forKey: "cloudMovement\(i)")
         }
