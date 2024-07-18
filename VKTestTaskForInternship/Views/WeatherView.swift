@@ -260,33 +260,41 @@ class WeatherView: UIView {
         }
     }
     
-    private func animateSnow() {
-        let numberOfFlakes = 50
-        
-        for _ in 0..<numberOfFlakes {
+    private func animateSnowflakes(count: Int, durationRange: ClosedRange<TimeInterval>, delayRange: ClosedRange<TimeInterval>, fallSpeed: CGFloat, oscillationAmplitude: CGFloat) {
+        for _ in 0..<count {
             let snowflake = UIImageView(image: UIImage(systemName: "snowflake"))
             snowflake.tintColor = .white
             let flakeSize = CGFloat(arc4random_uniform(10) + 15)
             snowflake.frame = CGRect(x: CGFloat(arc4random_uniform(UInt32(bounds.width))), y: -flakeSize, width: flakeSize, height: flakeSize)
             addSubview(snowflake)
             
-            let fallDuration = TimeInterval(arc4random_uniform(10) + 5)
-            let delay = TimeInterval(arc4random_uniform(10)) / 10.0
+            let fallDuration = TimeInterval.random(in: durationRange)
+            let delay = TimeInterval.random(in: delayRange)
             UIView.animate(withDuration: fallDuration, delay: delay, options: [.repeat, .curveLinear], animations: {
-                snowflake.frame.origin.y = self.bounds.height
+                snowflake.frame.origin.y = self.bounds.height * fallSpeed
             }, completion: { _ in
                 snowflake.removeFromSuperview()
             })
             
             let oscillation = CABasicAnimation(keyPath: "position.x")
             oscillation.duration = 2
-            oscillation.fromValue = snowflake.center.x - 20
-            oscillation.toValue = snowflake.center.x + 20
+            oscillation.fromValue = snowflake.center.x - oscillationAmplitude
+            oscillation.toValue = snowflake.center.x + oscillationAmplitude
             oscillation.repeatCount = Float.infinity
             oscillation.autoreverses = true
             snowflake.layer.add(oscillation, forKey: "oscillation")
         }
     }
+
+    private func animateSnow() {
+        animateSnowflakes(count: 50, durationRange: 5...15, delayRange: 0...1, fallSpeed: 1, oscillationAmplitude: 20)
+    }
+
+    private func animateBlizzard() {
+        animateSnowflakes(count: 150, durationRange: 2...8, delayRange: 0...1, fallSpeed: 3, oscillationAmplitude: 60)
+    }
+    
+    
     
     private func animateWind() {
         let windContainer = CALayer()
@@ -364,10 +372,6 @@ class WeatherView: UIView {
     private func animateOvercastMoon() {
         animateMoon()
         animateCloudy(numberOfClouds: 7, tintColor: [UIColor.white, UIColor.lightGray], duration: 10)
-    }
-    
-    private func animateBlizzard() {
-        animateSnow()
     }
     
     private func animateRainAndSnow() {
