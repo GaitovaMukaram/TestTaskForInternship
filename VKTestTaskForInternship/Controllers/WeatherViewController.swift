@@ -14,6 +14,7 @@ class WeatherViewController: UIViewController {
     private var weatherView: WeatherView?
     private let toggleButton = UIButton()
     private var selectedIndexPath: IndexPath?
+    private let selectedCellColor = UIColor(red: 36.0/255.0, green: 24.0/255.0, blue: 56.0/255.0, alpha: 1.0)
     private var isDay = true {
         didSet {
             updateBackground()
@@ -170,7 +171,7 @@ extension WeatherViewController: UICollectionViewDelegate, UICollectionViewDataS
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
         imageView.image = UIImage(systemName: weatherType.iconName)
-        imageView.tintColor = isSelected ? .systemBlue : .white
+        imageView.tintColor = isSelected ? selectedCellColor : .white
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }
@@ -182,7 +183,7 @@ extension WeatherViewController: UICollectionViewDelegate, UICollectionViewDataS
         label.numberOfLines = 0
         label.adjustsFontSizeToFitWidth = true
         label.minimumScaleFactor = 0.5
-        label.textColor = isSelected ? .systemBlue : .white
+        label.textColor = isSelected ? selectedCellColor : .white
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }
