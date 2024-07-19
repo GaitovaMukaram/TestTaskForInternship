@@ -10,7 +10,13 @@ import UIKit
 class WeatherViewController: UIViewController {
     
     private let weatherTypes = WeatherType.allCases
-    private let collectionView: UICollectionView
+    private let collectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        layout.itemSize = CGSize(width: 100, height: 100)
+        
+        return UICollectionView(frame: .zero, collectionViewLayout: layout)
+    }()
     private var weatherView: WeatherView?
     private let toggleButton = UIButton()
     private var selectedIndexPath: IndexPath?
@@ -23,17 +29,9 @@ class WeatherViewController: UIViewController {
         }
     }
     
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .horizontal
-        layout.itemSize = CGSize(width: 100, height: 100)
+    init() {
+        super.init(nibName: nil, bundle: nil)
         
-        collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-        
-        collectionView.delegate = self
-        collectionView.dataSource = self
-        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -50,6 +48,10 @@ class WeatherViewController: UIViewController {
     }
     
     private func setupCollectionView() {
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        collectionView.register(WeatherCollectionViewCell.self, forCellWithReuseIdentifier: "WeatherCell")
+        
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.backgroundColor = .clear
         collectionView.showsHorizontalScrollIndicator = false
@@ -135,30 +137,9 @@ extension WeatherViewController: UICollectionViewDelegate, UICollectionViewDataS
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
-        cell.contentView.subviews.forEach { $0.removeFromSuperview() }
-        
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "WeatherCell", for: indexPath) as! WeatherCollectionViewCell
         let weatherType = weatherTypes[indexPath.item]
-        let imageView = createImageView(for: weatherType, isSelected: indexPath == selectedIndexPath)
-        let label = createLabel(for: weatherType, isSelected: indexPath == selectedIndexPath)
-        
-        cell.contentView.addSubview(imageView)
-        cell.contentView.addSubview(label)
-        
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        label.translatesAutoresizingMaskIntoConstraints = false
-        
-        NSLayoutConstraint.activate([
-            imageView.topAnchor.constraint(equalTo: cell.contentView.topAnchor, constant: 10),
-            imageView.centerXAnchor.constraint(equalTo: cell.contentView.centerXAnchor),
-            imageView.widthAnchor.constraint(equalToConstant: 40),
-            imageView.heightAnchor.constraint(equalToConstant: 40),
-            
-            label.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 5),
-            label.leadingAnchor.constraint(equalTo: cell.contentView.leadingAnchor, constant: 5),
-            label.trailingAnchor.constraint(equalTo: cell.contentView.trailingAnchor, constant: -5),
-            label.bottomAnchor.constraint(equalTo: cell.contentView.bottomAnchor, constant: -10)
-        ])
+        cell.configure(with: weatherType, isSelected: indexPath == selectedIndexPath, selectedColor: selectedCellColor)
         return cell
     }
     
@@ -167,24 +148,4 @@ extension WeatherViewController: UICollectionViewDelegate, UICollectionViewDataS
         collectionView.reloadData()
         presentWeather(for: weatherTypes[indexPath.item])
     }
-    
-    private func createImageView(for weatherType: WeatherType, isSelected: Bool) -> UIImageView {
-        let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFit
-        imageView.image = UIImage(systemName: weatherType.iconName)
-        imageView.tintColor = isSelected ? selectedCellColor : .white
-        return imageView
-    }
-    
-    private func createLabel(for weatherType: WeatherType, isSelected: Bool) -> UILabel {
-        let label = UILabel()
-        label.text = weatherType.localizedString
-        label.textAlignment = .center
-        label.numberOfLines = 0
-        label.adjustsFontSizeToFitWidth = true
-        label.minimumScaleFactor = 0.5
-        label.textColor = isSelected ? selectedCellColor : .white
-        return label
-    }
 }
-

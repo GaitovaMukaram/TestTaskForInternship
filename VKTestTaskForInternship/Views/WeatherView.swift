@@ -104,10 +104,11 @@ class WeatherView: UIView {
         
         let numberOfStars = 30
         for _ in 0..<numberOfStars {
-            let starLayer = CAShapeLayer()
-            let starPath = UIBezierPath(arcCenter: CGPoint(x: CGFloat(arc4random_uniform(UInt32(bounds.width))), y: CGFloat(arc4random_uniform(UInt32(bounds.midY)))), radius: 2, startAngle: 0, endAngle: .pi * 2, clockwise: true)
-            starLayer.path = starPath.cgPath
-            starLayer.fillColor = UIColor.yellow.cgColor
+            let starLayer = CALayer()
+            let starSize: CGFloat = 4
+            starLayer.frame = CGRect(x: CGFloat.random(in: 0..<bounds.width), y: CGFloat.random(in: 0..<bounds.midY), width: starSize, height: starSize)
+            starLayer.backgroundColor = UIColor.yellow.cgColor
+            starLayer.cornerRadius = starSize / 2
             starsContainer.addSublayer(starLayer)
         }
         
@@ -124,12 +125,12 @@ class WeatherView: UIView {
         for _ in 0..<countDrops {
             let dropImageView = UIImageView(image: UIImage(systemName: "drop.fill"))
             dropImageView.tintColor = UIColor(red: 113.0/255.0, green: 192.0/255.0, blue: 235.0/255.0, alpha: 1.0)
-            let dropSize = CGFloat(arc4random_uniform(5) + 5)
-            let xPosition = CGFloat(arc4random_uniform(UInt32(bounds.width)))
+            let dropSize = CGFloat.random(in: 5...10)
+            let xPosition = CGFloat.random(in: 0..<bounds.width)
             dropImageView.frame = CGRect(x: xPosition, y: -dropSize, width: dropSize, height: dropSize)
             addSubview(dropImageView)
             
-            UIView.animate(withDuration: 1.0, delay: Double(arc4random_uniform(100)) / 100.0, options: [.repeat, .curveLinear], animations: {
+            UIView.animate(withDuration: 1.0, delay: Double.random(in: 0..<1), options: [.repeat, .curveLinear], animations: {
                 dropImageView.frame.origin.y = self.bounds.height
             }, completion: { _ in
                 dropImageView.removeFromSuperview()
@@ -145,15 +146,15 @@ class WeatherView: UIView {
         let numberOfLightnings = 3
         for _ in 0..<numberOfLightnings {
             let lightningPath = UIBezierPath()
-            let startX = CGFloat(arc4random_uniform(UInt32(bounds.width)))
+            let startX = CGFloat.random(in: 0..<bounds.width)
             let startY: CGFloat = 0
             lightningPath.move(to: CGPoint(x: startX, y: startY))
             
             let segments = 5
             var previousPoint = CGPoint(x: startX, y: startY)
             for _ in 0..<segments {
-                let randomX = CGFloat(arc4random_uniform(40)) - 20
-                let randomY = CGFloat(arc4random_uniform(60)) + 20
+                let randomX = CGFloat.random(in: -20...20)
+                let randomY = CGFloat.random(in: 20...80)
                 let newPoint = CGPoint(x: previousPoint.x + randomX, y: previousPoint.y + randomY)
                 lightningPath.addLine(to: newPoint)
                 previousPoint = newPoint
@@ -172,7 +173,7 @@ class WeatherView: UIView {
             fadeAnimation.fromValue = 1.0
             fadeAnimation.toValue = 0.0
             fadeAnimation.duration = 0.2
-            fadeAnimation.beginTime = CACurrentMediaTime() + CFTimeInterval(arc4random_uniform(3))
+            fadeAnimation.beginTime = CACurrentMediaTime() + CFTimeInterval(Double.random(in: 0..<3))
             fadeAnimation.autoreverses = true
             fadeAnimation.repeatCount = Float.infinity
             lightningLayer.add(fadeAnimation, forKey: "fade")
@@ -192,11 +193,11 @@ class WeatherView: UIView {
             
             let fogImageView = UIImageView(image: UIImage(systemName: "smoke.fill"))
             fogImageView.contentMode = .scaleToFill
-            fogImageView.tintColor = UIColor.white.withAlphaComponent(CGFloat(arc4random_uniform(2) == 0 ? 0.8 : 0.2))
+            fogImageView.tintColor = UIColor.white.withAlphaComponent(Bool.random() ? 0.8 : 0.2)
             fogLayer.addSublayer(fogImageView.layer)
             
             let fogHeight: CGFloat = 100
-            let yOffset = CGFloat(arc4random_uniform(UInt32(bounds.midY)))
+            let yOffset = CGFloat.random(in: 0..<bounds.midY)
             fogLayer.frame = CGRect(x: -bounds.width, y: bounds.height - yOffset - fogHeight / 2, width: bounds.width * 2, height: fogHeight)
             fogImageView.frame = fogLayer.bounds
             layer.addSublayer(fogLayer)
@@ -223,7 +224,7 @@ class WeatherView: UIView {
             let cloudImageView = UIImageView(image: UIImage(systemName: "cloud.fill"))
             cloudImageView.tintColor = tintColor.randomElement()
             cloudImageView.alpha = 0.8
-            let startY = CGFloat(arc4random_uniform(UInt32(bounds.midY - 60)))
+            let startY = CGFloat.random(in: 0..<bounds.midY - 50)
             cloudImageView.frame = CGRect(x: -120, y: startY, width: 120, height: 70)
             layer.addSublayer(cloudImageView.layer)
             
@@ -240,8 +241,9 @@ class WeatherView: UIView {
         for _ in 0..<count {
             let snowflake = UIImageView(image: UIImage(systemName: "snowflake"))
             snowflake.tintColor = .white
-            let flakeSize = CGFloat(arc4random_uniform(10) + 15)
-            snowflake.frame = CGRect(x: CGFloat(arc4random_uniform(UInt32(bounds.width))), y: -flakeSize, width: flakeSize, height: flakeSize)
+            let snowflakeSize = CGFloat.random(in: 10...20)
+            let xPosition = CGFloat.random(in: 0..<bounds.width)
+            snowflake.frame = CGRect(x: xPosition, y: -snowflakeSize, width: snowflakeSize, height: snowflakeSize)
             addSubview(snowflake)
             
             let fallDuration = TimeInterval.random(in: durationRange)
@@ -276,15 +278,15 @@ class WeatherView: UIView {
         for pathIndex in 0..<numberOfPaths {
             DispatchQueue.main.asyncAfter(deadline: .now() + Double(pathIndex) * 0.5) {
                 let windPath = UIBezierPath()
-                let startY = CGFloat(arc4random_uniform(UInt32(self.bounds.height - 150)))
-                let direction = arc4random_uniform(2) == 0 ? 1 : -1
+                let startY = CGFloat.random(in: 0..<(self.bounds.height - 150))
+                let direction = Bool.random() ? 1 : -1
                 windPath.move(to: CGPoint(x: direction == 1 ? -50 : self.bounds.width + 50, y: startY))
                 
                 let straightLineEndX = direction == 1 ? self.bounds.width / 3 : 2 * self.bounds.width / 3
                 windPath.addLine(to: CGPoint(x: straightLineEndX, y: startY))
                 
-                let spiralCenterX = straightLineEndX + CGFloat(direction) * CGFloat(arc4random_uniform(UInt32(self.bounds.width / 3)))
-                let spiralCenterY = CGFloat(arc4random_uniform(UInt32(self.bounds.height)))
+                let spiralCenterX = straightLineEndX + CGFloat(direction) * CGFloat.random(in: 0..<(self.bounds.width / 3))
+                let spiralCenterY = CGFloat.random(in: 0..<self.bounds.height)
                 let spiralCenter = CGPoint(x: spiralCenterX, y: spiralCenterY)
                 let numberOfSpirals = 3
                 let spiralRadiusIncrement: CGFloat = 20
@@ -310,7 +312,7 @@ class WeatherView: UIView {
                     
                     let leafAnimation = CAKeyframeAnimation(keyPath: "position")
                     leafAnimation.path = windPath.cgPath
-                    leafAnimation.duration = 8 + Double(i * 2)
+                    leafAnimation.duration = 4
                     leafAnimation.repeatCount = Float.infinity
                     leafImageView.layer.add(leafAnimation, forKey: "leafMovement\(pathIndex)_\(i)")
                 }
@@ -319,14 +321,14 @@ class WeatherView: UIView {
                 for particleIndex in 0..<numberOfDustParticles {
                     let dustParticle = UIView()
                     dustParticle.backgroundColor = .brown
-                    let particleSize: CGFloat = CGFloat(arc4random_uniform(3) + 2)
+                    let particleSize: CGFloat = CGFloat.random(in: 2...5)
                     dustParticle.frame = CGRect(x: direction == 1 ? -particleSize : self.bounds.width + particleSize, y: startY, width: particleSize, height: particleSize)
                     dustParticle.layer.cornerRadius = particleSize / 2
                     self.addSubview(dustParticle)
                     
                     let dustAnimation = CAKeyframeAnimation(keyPath: "position")
                     dustAnimation.path = windPath.cgPath
-                    dustAnimation.duration = 8 + Double(arc4random_uniform(5))
+                    dustAnimation.duration = 4 + Double.random(in: 0...5)
                     dustAnimation.repeatCount = Float.infinity
                     dustParticle.layer.add(dustAnimation, forKey: "dustMovement\(pathIndex)_\(particleIndex)")
                 }
@@ -374,20 +376,19 @@ class WeatherView: UIView {
         
         let numberOfHailstones = 20
         for _ in 0..<numberOfHailstones {
-            let hailstone = CAShapeLayer()
-            let hailstoneSize: CGFloat = CGFloat(arc4random_uniform(5) + 5)
-            let randomXPosition = CGFloat(arc4random_uniform(UInt32(bounds.width)))
+            let hailstone = CALayer()
+            let hailstoneSize: CGFloat = CGFloat(Int.random(in: 5...9))
+            let randomXPosition = CGFloat.random(in: 0..<bounds.width)
             
-            let hailstonePath = UIBezierPath(ovalIn: CGRect(x: 0, y: 0, width: hailstoneSize, height: hailstoneSize))
-            hailstone.path = hailstonePath.cgPath
-            hailstone.fillColor = UIColor.white.cgColor
-            hailstone.frame = CGRect(x: randomXPosition, y: CGFloat(arc4random_uniform(UInt32(bounds.midY - 200))), width: hailstoneSize, height: hailstoneSize)
+            hailstone.backgroundColor = UIColor.white.cgColor
+            hailstone.cornerRadius = hailstoneSize / 2
+            hailstone.frame = CGRect(x: randomXPosition, y: CGFloat.random(in: 0..<bounds.midY - 200), width: hailstoneSize, height: hailstoneSize)
             layer.addSublayer(hailstone)
             
             let fallAnimation = CABasicAnimation(keyPath: "position.y")
             fallAnimation.fromValue = hailstone.position.y
             fallAnimation.toValue = bounds.height
-            fallAnimation.duration = 0.1 + Double(arc4random_uniform(10)) / 10.0
+            fallAnimation.duration = 0.1 + Double.random(in: 0...1)
             fallAnimation.repeatCount = Float.infinity
             hailstone.add(fallAnimation, forKey: "fallingHailstone")
         }

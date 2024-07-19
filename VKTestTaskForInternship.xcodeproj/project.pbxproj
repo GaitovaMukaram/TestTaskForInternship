@@ -17,6 +17,7 @@
 		9F6482462C484C8E00628F18 /* WeatherViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F6482452C484C8E00628F18 /* WeatherViewController.swift */; };
 		9F6482512C48CCD400628F18 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9F64824F2C48CCD400628F18 /* Localizable.strings */; };
 		9F6482552C49151B00628F18 /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F6482542C49151B00628F18 /* String+Extension.swift */; };
+		9FA48CB92C4A65AA004F183B /* WeatherCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA48CB82C4A65AA004F183B /* WeatherCollectionViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,6 +34,7 @@
 		9F6482502C48CCD400628F18 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		9F6482522C48CCFD00628F18 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		9F6482542C49151B00628F18 /* String+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
+		9FA48CB82C4A65AA004F183B /* WeatherCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherCollectionViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,14 +67,13 @@
 		9F6482262C483F6100628F18 /* VKTestTaskForInternship */ = {
 			isa = PBXGroup;
 			children = (
+				9FA48CBB2C4A6E70004F183B /* Localization */,
+				9FA48CBA2C4A6E59004F183B /* Application */,
 				9F6482532C4914CB00628F18 /* Extensions */,
 				9F6482402C484BB400628F18 /* Models */,
 				9F64823F2C484BAC00628F18 /* Views */,
 				9F64823E2C484B9F00628F18 /* Controllers */,
-				9F6482272C483F6100628F18 /* AppDelegate.swift */,
-				9F6482292C483F6100628F18 /* SceneDelegate.swift */,
 				9F6482332C483F6200628F18 /* Assets.xcassets */,
-				9F64824F2C48CCD400628F18 /* Localizable.strings */,
 				9F6482352C483F6200628F18 /* LaunchScreen.storyboard */,
 				9F6482382C483F6200628F18 /* Info.plist */,
 				9F6482302C483F6100628F18 /* VKTestTaskForInternship.xcdatamodeld */,
@@ -92,6 +93,7 @@
 			isa = PBXGroup;
 			children = (
 				9F6482432C484C5700628F18 /* WeatherView.swift */,
+				9FA48CB82C4A65AA004F183B /* WeatherCollectionViewCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -110,6 +112,23 @@
 				9F6482542C49151B00628F18 /* String+Extension.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		9FA48CBA2C4A6E59004F183B /* Application */ = {
+			isa = PBXGroup;
+			children = (
+				9F6482272C483F6100628F18 /* AppDelegate.swift */,
+				9F6482292C483F6100628F18 /* SceneDelegate.swift */,
+			);
+			path = Application;
+			sourceTree = "<group>";
+		};
+		9FA48CBB2C4A6E70004F183B /* Localization */ = {
+			isa = PBXGroup;
+			children = (
+				9F64824F2C48CCD400628F18 /* Localizable.strings */,
+			);
+			path = Localization;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -185,6 +204,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9F6482442C484C5700628F18 /* WeatherView.swift in Sources */,
+				9FA48CB92C4A65AA004F183B /* WeatherCollectionViewCell.swift in Sources */,
 				9F6482552C49151B00628F18 /* String+Extension.swift in Sources */,
 				9F6482462C484C8E00628F18 /* WeatherViewController.swift in Sources */,
 				9F6482422C484BE600628F18 /* WeatherTypeModel.swift in Sources */,
@@ -350,6 +370,8 @@
 				INFOPLIST_FILE = VKTestTaskForInternship/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIRequiresFullScreen = YES;
+				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -377,6 +399,8 @@
 				INFOPLIST_FILE = VKTestTaskForInternship/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIRequiresFullScreen = YES;
+				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
