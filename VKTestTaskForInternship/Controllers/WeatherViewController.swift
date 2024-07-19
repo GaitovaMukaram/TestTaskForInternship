@@ -74,7 +74,7 @@ class WeatherViewController: UIViewController {
         let screenWidth = UIScreen.main.bounds.width
         
         let buttonWidth = screenWidth * 0.2
-        let buttonHeight = buttonWidth / 2.22
+        let buttonHeight = buttonWidth / 1.8
         
         NSLayoutConstraint.activate([
             toggleButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -86,7 +86,7 @@ class WeatherViewController: UIViewController {
     
     private func updateToggleButtonImage() {
         UIView.transition(with: toggleButton, duration: 0.1, options: .transitionCrossDissolve, animations: {
-            let image = self.isDay ? UIImage(named: "moon") : UIImage(named: "sun")
+            let image = self.isDay ? UIImage(named: "sun") : UIImage(named: "moon")
             self.toggleButton.setImage(image, for: .normal)
         }, completion: nil)
     }
