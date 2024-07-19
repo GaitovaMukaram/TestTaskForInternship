@@ -71,11 +71,16 @@ class WeatherViewController: UIViewController {
         updateToggleButtonImage()
         view.addSubview(toggleButton)
         
+        let screenWidth = UIScreen.main.bounds.width
+        
+        let buttonWidth = screenWidth * 0.2
+        let buttonHeight = buttonWidth / 2.22
+        
         NSLayoutConstraint.activate([
             toggleButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             toggleButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
-            toggleButton.widthAnchor.constraint(equalToConstant: 100),
-            toggleButton.heightAnchor.constraint(equalToConstant: 45)
+            toggleButton.widthAnchor.constraint(equalToConstant: buttonWidth),
+            toggleButton.heightAnchor.constraint(equalToConstant: buttonHeight)
         ])
     }
     
@@ -151,4 +156,5 @@ extension WeatherViewController: UICollectionViewDelegate, UICollectionViewDataS
         collectionView.reloadData()
         presentWeather(for: weatherTypes[indexPath.item])
     }
+    
 }

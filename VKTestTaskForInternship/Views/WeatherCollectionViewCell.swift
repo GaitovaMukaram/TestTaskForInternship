@@ -18,9 +18,6 @@ class WeatherCollectionViewCell: UICollectionViewCell {
     let label: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
-        label.numberOfLines = 0
-        label.adjustsFontSizeToFitWidth = true
-        label.minimumScaleFactor = 0.5
         return label
     }()
     
@@ -32,13 +29,30 @@ class WeatherCollectionViewCell: UICollectionViewCell {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         label.translatesAutoresizingMaskIntoConstraints = false
         
+        let minImageViewSize: CGFloat = 30
+        let maxImageViewSize: CGFloat = 50
+        let imageViewSize = max(min(frame.width * 0.4, maxImageViewSize), minImageViewSize)
+
+        let minLabelPadding: CGFloat = 3
+        let maxLabelPadding: CGFloat = 5
+        let labelVerticalPadding = max(min(frame.height * 0.02, maxLabelPadding), minLabelPadding)
+        
+        let minFontSize: CGFloat = 12
+        let maxFontSize: CGFloat = 32
+        let fontSize = max(min(frame.width * 0.05, maxFontSize), minFontSize)
+        
+        label.font = UIFont.systemFont(ofSize: fontSize)
+        label.adjustsFontForContentSizeCategory = true
+        label.numberOfLines = 0
+        label.lineBreakMode = .byWordWrapping
+        
         NSLayoutConstraint.activate([
             imageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
             imageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            imageView.widthAnchor.constraint(equalToConstant: 40),
-            imageView.heightAnchor.constraint(equalToConstant: 40),
+            imageView.widthAnchor.constraint(equalToConstant: imageViewSize),
+            imageView.heightAnchor.constraint(equalToConstant: imageViewSize),
             
-            label.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 5),
+            label.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: labelVerticalPadding),
             label.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 5),
             label.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -5),
             label.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10)

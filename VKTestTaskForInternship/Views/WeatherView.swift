@@ -64,8 +64,11 @@ class WeatherView: UIView {
     private func animateSunny() {
         let sunImageView = UIImageView(image: UIImage(systemName: "sun.max.fill"))
         sunImageView.tintColor = .orange
-        sunImageView.bounds = CGRect(x: 0, y: 0, width: 200, height: 200)
-        sunImageView.center = CGPoint(x: bounds.midX, y: bounds.midY - 150)
+        let sunSize = bounds.width * 0.41
+        sunImageView.bounds = CGRect(x: 0, y: 0, width: sunSize, height: sunSize)
+        let centerX = bounds.midX
+        let centerY = bounds.midY - bounds.height * 0.2
+        sunImageView.center = CGPoint(x: centerX, y: centerY)
         sunImageView.contentMode = .scaleAspectFit
         layer.addSublayer(sunImageView.layer)
         
@@ -87,8 +90,11 @@ class WeatherView: UIView {
     private func animateMoon() {
         let moonImageView = UIImageView(image: UIImage(systemName: "moonphase.new.moon"))
         moonImageView.tintColor = .yellow
-        moonImageView.bounds = CGRect(x: 0, y: 0, width: 100, height: 100)
-        moonImageView.center = CGPoint(x: bounds.midX, y: bounds.midY - 150)
+        let moonSize = bounds.width * 0.2
+        moonImageView.bounds = CGRect(x: 0, y: 0, width: moonSize, height: moonSize)
+        let centerX = bounds.midX
+        let centerY = bounds.midY - bounds.height * 0.2
+        moonImageView.center = CGPoint(x: centerX, y: centerY)
         moonImageView.contentMode = .scaleAspectFit
         layer.addSublayer(moonImageView.layer)
         
@@ -127,7 +133,7 @@ class WeatherView: UIView {
         for _ in 0..<countDrops {
             let dropImageView = UIImageView(image: UIImage(systemName: "drop.fill"))
             dropImageView.tintColor = UIColor(red: 113.0/255.0, green: 192.0/255.0, blue: 235.0/255.0, alpha: 1.0)
-            let dropSize = CGFloat.random(in: 5...10)
+            let dropSize = CGFloat.random(in: 0.01...0.02) * bounds.width
             let xPosition = CGFloat.random(in: 0..<bounds.width)
             dropImageView.frame = CGRect(x: xPosition, y: -dropSize, width: dropSize, height: dropSize)
             addSubview(dropImageView)
@@ -221,20 +227,24 @@ class WeatherView: UIView {
         }
     }
     
-    private func animateCloudy(numberOfClouds: Int, tintColor: [UIColor], duration : Double) {
+    private func animateCloudy(numberOfClouds: Int, tintColor: [UIColor], duration: Double) {
         for i in 0..<numberOfClouds {
             let cloudImageView = UIImageView(image: UIImage(systemName: "cloud.fill"))
             cloudImageView.tintColor = tintColor.randomElement()
             cloudImageView.alpha = 0.8
-            let startY = CGFloat.random(in: 0..<bounds.midY - 50)
-            cloudImageView.frame = CGRect(x: -120, y: startY, width: 120, height: 70)
+            
+            let cloudWidth = bounds.width * 0.3
+            let cloudHeight = cloudWidth / 1.7
+            let startY = CGFloat.random(in: 0..<bounds.midY - cloudHeight / 2)
+            
+            cloudImageView.frame = CGRect(x: -cloudWidth, y: startY, width: cloudWidth, height: cloudHeight)
             layer.addSublayer(cloudImageView.layer)
             
             let cloudAnimation = CABasicAnimation(keyPath: "position.x")
-            cloudAnimation.fromValue = -120
-            cloudAnimation.toValue = bounds.width + 120
+            cloudAnimation.fromValue = -cloudWidth
+            cloudAnimation.toValue = bounds.width + cloudWidth
             cloudAnimation.duration = duration + Double(i * 5)
-            cloudAnimation.repeatCount = Float.infinity
+            cloudAnimation.repeatCount = .infinity
             cloudImageView.layer.add(cloudAnimation, forKey: "cloudMovement\(i)")
         }
     }
@@ -243,7 +253,9 @@ class WeatherView: UIView {
         for _ in 0..<count {
             let snowflake = UIImageView(image: UIImage(systemName: "snowflake"))
             snowflake.tintColor = .white
-            let snowflakeSize = CGFloat.random(in: 10...20)
+            let minSnowflakeSize: CGFloat = bounds.width * 0.02
+            let maxSnowflakeSize: CGFloat = minSnowflakeSize * 2
+            let snowflakeSize = CGFloat.random(in: minSnowflakeSize...maxSnowflakeSize)
             let xPosition = CGFloat.random(in: 0..<bounds.width)
             snowflake.frame = CGRect(x: xPosition, y: -snowflakeSize, width: snowflakeSize, height: snowflakeSize)
             addSubview(snowflake)
@@ -275,7 +287,7 @@ class WeatherView: UIView {
     }
     
     private func animateWind() {
-        let numberOfPaths = 5
+        let numberOfPaths = 10
         
         for pathIndex in 0..<numberOfPaths {
             DispatchQueue.main.asyncAfter(deadline: .now() + Double(pathIndex) * 0.5) {
@@ -307,7 +319,7 @@ class WeatherView: UIView {
                 for i in 0..<numberOfLeaves {
                     let leafImageView = UIImageView(image: UIImage(systemName: "leaf.fill"))
                     leafImageView.tintColor = UIColor(red: 0.6, green: 0.8, blue: 0.6, alpha: 1.0)
-                    let leafSize: CGFloat = 30
+                    let leafSize: CGFloat = self.bounds.width * 0.03
                     leafImageView.frame = CGRect(x: direction == 1 ? -leafSize : self.bounds.width + leafSize, y: startY, width: leafSize, height: leafSize)
                     leafImageView.contentMode = .scaleAspectFit
                     self.addSubview(leafImageView)
@@ -319,11 +331,13 @@ class WeatherView: UIView {
                     leafImageView.layer.add(leafAnimation, forKey: "leafMovement\(pathIndex)_\(i)")
                 }
                 
-                let numberOfDustParticles = 2
+                let numberOfDustParticles = 5
                 for particleIndex in 0..<numberOfDustParticles {
                     let dustParticle = UIView()
                     dustParticle.backgroundColor = .brown
-                    let particleSize: CGFloat = CGFloat.random(in: 2...5)
+                    let minParticleSize = self.bounds.width * 0.002
+                    let maxParticleSize = minParticleSize * 2
+                    let particleSize: CGFloat = CGFloat.random(in: minParticleSize...maxParticleSize)
                     dustParticle.frame = CGRect(x: direction == 1 ? -particleSize : self.bounds.width + particleSize, y: startY, width: particleSize, height: particleSize)
                     dustParticle.layer.cornerRadius = particleSize / 2
                     self.addSubview(dustParticle)
@@ -379,7 +393,9 @@ class WeatherView: UIView {
         let numberOfHailstones = 20
         for _ in 0..<numberOfHailstones {
             let hailstone = CALayer()
-            let hailstoneSize: CGFloat = CGFloat(Int.random(in: 5...9))
+            let minHailstoneSize: CGFloat = bounds.width * 0.01
+            let maxHailstoneSize: CGFloat = minHailstoneSize * 1.5
+            let hailstoneSize: CGFloat = CGFloat.random(in: minHailstoneSize...maxHailstoneSize)
             let randomXPosition = CGFloat.random(in: 0..<bounds.width)
             
             hailstone.backgroundColor = UIColor.white.cgColor
