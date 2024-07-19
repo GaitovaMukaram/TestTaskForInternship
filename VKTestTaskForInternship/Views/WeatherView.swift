@@ -223,7 +223,8 @@ class WeatherView: UIView {
             let cloudImageView = UIImageView(image: UIImage(systemName: "cloud.fill"))
             cloudImageView.tintColor = tintColor.randomElement()
             cloudImageView.alpha = 0.8
-            cloudImageView.frame = CGRect(x: -120, y: CGFloat(arc4random_uniform(UInt32(bounds.midY))), width: 120, height: 70)
+            let startY = CGFloat(arc4random_uniform(UInt32(bounds.midY - 60)))
+            cloudImageView.frame = CGRect(x: -120, y: startY, width: 120, height: 70)
             layer.addSublayer(cloudImageView.layer)
             
             let cloudAnimation = CABasicAnimation(keyPath: "position.x")
