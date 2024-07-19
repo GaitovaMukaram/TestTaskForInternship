@@ -47,7 +47,6 @@ class WeatherViewController: UIViewController {
         setupCollectionView()
         setupToggleButton()
         randomPresentWeather()
-        
     }
     
     private func setupCollectionView() {
@@ -146,6 +145,9 @@ extension WeatherViewController: UICollectionViewDelegate, UICollectionViewDataS
         cell.contentView.addSubview(imageView)
         cell.contentView.addSubview(label)
         
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        label.translatesAutoresizingMaskIntoConstraints = false
+        
         NSLayoutConstraint.activate([
             imageView.topAnchor.constraint(equalTo: cell.contentView.topAnchor, constant: 10),
             imageView.centerXAnchor.constraint(equalTo: cell.contentView.centerXAnchor),
@@ -157,7 +159,6 @@ extension WeatherViewController: UICollectionViewDelegate, UICollectionViewDataS
             label.trailingAnchor.constraint(equalTo: cell.contentView.trailingAnchor, constant: -5),
             label.bottomAnchor.constraint(equalTo: cell.contentView.bottomAnchor, constant: -10)
         ])
-        
         return cell
     }
     
@@ -172,7 +173,6 @@ extension WeatherViewController: UICollectionViewDelegate, UICollectionViewDataS
         imageView.contentMode = .scaleAspectFit
         imageView.image = UIImage(systemName: weatherType.iconName)
         imageView.tintColor = isSelected ? selectedCellColor : .white
-        imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }
     
@@ -184,7 +184,6 @@ extension WeatherViewController: UICollectionViewDelegate, UICollectionViewDataS
         label.adjustsFontSizeToFitWidth = true
         label.minimumScaleFactor = 0.5
         label.textColor = isSelected ? selectedCellColor : .white
-        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }
 }

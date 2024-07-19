@@ -62,54 +62,41 @@ class WeatherView: UIView {
     }
     
     private func animateSunny() {
-        let sunContainer = CALayer()
-        let sunCenter = CGPoint(x: bounds.midX, y: bounds.midY - 120)
-        sunContainer.position = sunCenter
-        layer.addSublayer(sunContainer)
-        
-        let sunLayer = CAShapeLayer()
-        let sunPath = UIBezierPath(arcCenter: .zero, radius: 50, startAngle: 0, endAngle: .pi * 2, clockwise: true)
-        sunLayer.path = sunPath.cgPath
-        sunLayer.fillColor = UIColor.orange.cgColor
-        sunContainer.addSublayer(sunLayer)
-        
-        let numberOfRays = 12
-        let rayLength: CGFloat = 30
-        let raySpacing: CGFloat = 10
-        
-        for i in 0..<numberOfRays {
-            let angle = CGFloat(i) * (.pi * 2 / CGFloat(numberOfRays))
-            
-            let startX = cos(angle) * (50 + raySpacing)
-            let startY = sin(angle) * (50 + raySpacing)
-            let endX = cos(angle) * (50 + raySpacing + rayLength)
-            let endY = sin(angle) * (50 + raySpacing + rayLength)
-            
-            let rayPath = UIBezierPath()
-            rayPath.move(to: CGPoint(x: startX, y: startY))
-            rayPath.addLine(to: CGPoint(x: endX, y: endY))
-            
-            let rayLayer = CAShapeLayer()
-            rayLayer.path = rayPath.cgPath
-            rayLayer.strokeColor = UIColor.orange.cgColor
-            rayLayer.lineWidth = 5
-            rayLayer.lineCap = .round
-            sunContainer.addSublayer(rayLayer)
-        }
+        let sunImageView = UIImageView(image: UIImage(systemName: "sun.max.fill"))
+        sunImageView.tintColor = .orange
+        sunImageView.frame = CGRect(x: bounds.midX - 100, y: bounds.midY - 250, width: 180, height: 180)
+        sunImageView.contentMode = .scaleAspectFit
+        layer.addSublayer(sunImageView.layer)
         
         let rotateAnimation = CABasicAnimation(keyPath: "transform.rotation")
         rotateAnimation.toValue = NSNumber(value: Double.pi * 2)
         rotateAnimation.duration = 5
         rotateAnimation.repeatCount = Float.infinity
-        sunContainer.add(rotateAnimation, forKey: "rotate")
+        sunImageView.layer.add(rotateAnimation, forKey: "rotate")
+        
+        let pulseAnimation = CABasicAnimation(keyPath: "transform.scale")
+        pulseAnimation.fromValue = 1.0
+        pulseAnimation.toValue = 1.1
+        pulseAnimation.duration = 1
+        pulseAnimation.autoreverses = true
+        pulseAnimation.repeatCount = Float.infinity
+        sunImageView.layer.add(pulseAnimation, forKey: "pulse")
     }
     
     private func animateMoon() {
-        let moonLayer = CAShapeLayer()
-        let moonPath = UIBezierPath(arcCenter: CGPoint(x: bounds.midX, y: bounds.midY - 120), radius: 50, startAngle: 0, endAngle: .pi * 2, clockwise: true)
-        moonLayer.path = moonPath.cgPath
-        moonLayer.fillColor = UIColor.yellow.cgColor
-        layer.addSublayer(moonLayer)
+        let moonImageView = UIImageView(image: UIImage(systemName: "moonphase.new.moon"))
+        moonImageView.tintColor = .yellow
+        moonImageView.frame = CGRect(x: bounds.midX - 50, y: bounds.midY - 150, width: 100, height: 100)
+        moonImageView.contentMode = .scaleAspectFit
+        layer.addSublayer(moonImageView.layer)
+        
+        let pulseAnimation = CABasicAnimation(keyPath: "transform.scale")
+        pulseAnimation.fromValue = 1.0
+        pulseAnimation.toValue = 1.1
+        pulseAnimation.duration = 1
+        pulseAnimation.autoreverses = true
+        pulseAnimation.repeatCount = Float.infinity
+        moonImageView.layer.add(pulseAnimation, forKey: "pulse")
         
         let starsContainer = CALayer()
         starsContainer.frame = bounds
@@ -198,11 +185,7 @@ class WeatherView: UIView {
     }
     
     private func animateFog() {
-        let fogContainer = CALayer()
-        fogContainer.frame = bounds
-        layer.addSublayer(fogContainer)
-        
-        let numberOfFogLayers = 7
+        let numberOfFogLayers = 9
         
         for i in 0..<numberOfFogLayers {
             let fogLayer = CALayer()
@@ -213,10 +196,10 @@ class WeatherView: UIView {
             fogLayer.addSublayer(fogImageView.layer)
             
             let fogHeight: CGFloat = 100
-            let yOffset = CGFloat(arc4random_uniform(UInt32(bounds.midY - 50)))
+            let yOffset = CGFloat(arc4random_uniform(UInt32(bounds.midY)))
             fogLayer.frame = CGRect(x: -bounds.width, y: bounds.height - yOffset - fogHeight / 2, width: bounds.width * 2, height: fogHeight)
             fogImageView.frame = fogLayer.bounds
-            fogContainer.addSublayer(fogLayer)
+            layer.addSublayer(fogLayer)
             
             let fogAnimation = CABasicAnimation(keyPath: "position.x")
             fogAnimation.fromValue = -bounds.width
@@ -236,16 +219,12 @@ class WeatherView: UIView {
     }
     
     private func animateCloudy(numberOfClouds: Int, tintColor: [UIColor], duration : Double) {
-        let cloudsContainer = CALayer()
-        cloudsContainer.frame = bounds
-        layer.addSublayer(cloudsContainer)
-        
         for i in 0..<numberOfClouds {
             let cloudImageView = UIImageView(image: UIImage(systemName: "cloud.fill"))
             cloudImageView.tintColor = tintColor.randomElement()
             cloudImageView.alpha = 0.8
             cloudImageView.frame = CGRect(x: -120, y: CGFloat(arc4random_uniform(UInt32(bounds.midY))), width: 120, height: 70)
-            cloudsContainer.addSublayer(cloudImageView.layer)
+            layer.addSublayer(cloudImageView.layer)
             
             let cloudAnimation = CABasicAnimation(keyPath: "position.x")
             cloudAnimation.fromValue = -120
@@ -281,11 +260,11 @@ class WeatherView: UIView {
             snowflake.layer.add(oscillation, forKey: "oscillation")
         }
     }
-
+    
     private func animateSnow() {
         animateSnowflakes(count: 50, durationRange: 5...15, delayRange: 0...1, fallSpeed: 1, oscillationAmplitude: 20)
     }
-
+    
     private func animateBlizzard() {
         animateSnowflakes(count: 150, durationRange: 2...8, delayRange: 0...1, fallSpeed: 3, oscillationAmplitude: 60)
     }
