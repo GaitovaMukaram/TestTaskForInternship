@@ -12,7 +12,6 @@ class WeatherCollectionViewCell: UICollectionViewCell {
     let imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
-        imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
     
@@ -22,7 +21,6 @@ class WeatherCollectionViewCell: UICollectionViewCell {
         label.numberOfLines = 0
         label.adjustsFontSizeToFitWidth = true
         label.minimumScaleFactor = 0.5
-        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
@@ -30,6 +28,9 @@ class WeatherCollectionViewCell: UICollectionViewCell {
         super.init(frame: frame)
         contentView.addSubview(imageView)
         contentView.addSubview(label)
+        
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        label.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
             imageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),

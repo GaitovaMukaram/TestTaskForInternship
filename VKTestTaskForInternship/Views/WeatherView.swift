@@ -64,7 +64,8 @@ class WeatherView: UIView {
     private func animateSunny() {
         let sunImageView = UIImageView(image: UIImage(systemName: "sun.max.fill"))
         sunImageView.tintColor = .orange
-        sunImageView.frame = CGRect(x: bounds.midX - 100, y: bounds.midY - 250, width: 180, height: 180)
+        sunImageView.bounds = CGRect(x: 0, y: 0, width: 200, height: 200)
+        sunImageView.center = CGPoint(x: bounds.midX, y: bounds.midY - 150)
         sunImageView.contentMode = .scaleAspectFit
         layer.addSublayer(sunImageView.layer)
         
@@ -86,7 +87,8 @@ class WeatherView: UIView {
     private func animateMoon() {
         let moonImageView = UIImageView(image: UIImage(systemName: "moonphase.new.moon"))
         moonImageView.tintColor = .yellow
-        moonImageView.frame = CGRect(x: bounds.midX - 50, y: bounds.midY - 150, width: 100, height: 100)
+        moonImageView.bounds = CGRect(x: 0, y: 0, width: 100, height: 100)
+        moonImageView.center = CGPoint(x: bounds.midX, y: bounds.midY - 150)
         moonImageView.contentMode = .scaleAspectFit
         layer.addSublayer(moonImageView.layer)
         

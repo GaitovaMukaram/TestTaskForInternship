@@ -88,6 +88,9 @@ class WeatherViewController: UIViewController {
     
     @objc private func toggleButtonTapped(_ sender: UIButton) {
         isDay.toggle()
+        
+        let generator = UIImpactFeedbackGenerator(style: .medium)
+        generator.impactOccurred()
     }
     
     private func updateBackground() {
@@ -124,7 +127,7 @@ class WeatherViewController: UIViewController {
             view.insertSubview(weatherView, belowSubview: collectionView)
         }
         
-        UIView.transition(with: view, duration: 1.0, options: .transitionCrossDissolve, animations: nil, completion: nil)
+        UIView.transition(with: view, duration: 0.5, options: .transitionCrossDissolve, animations: nil, completion: nil)
     }
 }
 
