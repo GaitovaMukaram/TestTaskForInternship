@@ -88,7 +88,7 @@ class WeatherView: UIView {
     }
     
     private func animateMoon() {
-        let moonImageView = UIImageView(image: UIImage(systemName: "moonphase.new.moon"))
+        let moonImageView = UIImageView(image: UIImage(systemName: "moon.fill"))
         moonImageView.tintColor = .yellow
         let moonSize = bounds.width * 0.2
         moonImageView.bounds = CGRect(x: 0, y: 0, width: moonSize, height: moonSize)
