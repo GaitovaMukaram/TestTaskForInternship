@@ -43,7 +43,7 @@ enum WeatherType: String, CaseIterable {
         case .rainAndSnow: return "cloud.sleet.fill"
         case .partlyCloudy: return "cloud.sun.fill"
         case .lightRain: return "cloud.sun.rain.fill"
-        case .hail: return "cloud.hail"
+        case .hail: return "cloud.hail.fill"
         case .heavyRain: return "cloud.heavyrain.fill"
         }
     }

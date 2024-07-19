@@ -16,20 +16,14 @@ class WeatherView: UIView {
         self.isDay = isDay
         super.init(frame: frame)
         self.weatherType = weatherType
-        setupView()
+        animateWeather()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func setupView() {
-        guard weatherType != nil else { return }
-        animateWeather()
-    }
-    
     private func animateWeather() {
-        guard let weatherType = weatherType else { return }
         
         switch weatherType {
         case .clear:
@@ -62,12 +56,14 @@ class WeatherView: UIView {
             animateHeavyRain()
         case .stormAndRain:
             animateStormAndRain()
+        case .none:
+            isDay ? animateSunny() : animateMoon()
         }
     }
     
     private func animateSunny() {
         let sunContainer = CALayer()
-        let sunCenter = CGPoint(x: bounds.midX, y: bounds.midY - 100)
+        let sunCenter = CGPoint(x: bounds.midX, y: bounds.midY - 120)
         sunContainer.position = sunCenter
         layer.addSublayer(sunContainer)
         
@@ -110,7 +106,7 @@ class WeatherView: UIView {
     
     private func animateMoon() {
         let moonLayer = CAShapeLayer()
-        let moonPath = UIBezierPath(arcCenter: CGPoint(x: bounds.midX, y: bounds.midY - 100), radius: 50, startAngle: 0, endAngle: .pi * 2, clockwise: true)
+        let moonPath = UIBezierPath(arcCenter: CGPoint(x: bounds.midX, y: bounds.midY - 120), radius: 50, startAngle: 0, endAngle: .pi * 2, clockwise: true)
         moonLayer.path = moonPath.cgPath
         moonLayer.fillColor = UIColor.yellow.cgColor
         layer.addSublayer(moonLayer)
@@ -295,10 +291,6 @@ class WeatherView: UIView {
     }
     
     private func animateWind() {
-        let windContainer = CALayer()
-        windContainer.frame = bounds
-        layer.addSublayer(windContainer)
-        
         let numberOfPaths = 5
         
         for pathIndex in 0..<numberOfPaths {
