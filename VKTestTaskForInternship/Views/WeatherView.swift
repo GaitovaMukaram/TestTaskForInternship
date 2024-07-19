@@ -140,7 +140,7 @@ class WeatherView: UIView {
     private func animateRain(countDrops: Int) {
         for _ in 0..<countDrops {
             let dropImageView = UIImageView(image: UIImage(systemName: "drop.fill"))
-            dropImageView.tintColor = .blue
+            dropImageView.tintColor = UIColor(red: 113.0/255.0, green: 192.0/255.0, blue: 235.0/255.0, alpha: 1.0)
             let dropSize = CGFloat(arc4random_uniform(5) + 5)
             let xPosition = CGFloat(arc4random_uniform(UInt32(bounds.width)))
             dropImageView.frame = CGRect(x: xPosition, y: -dropSize, width: dropSize, height: dropSize)
