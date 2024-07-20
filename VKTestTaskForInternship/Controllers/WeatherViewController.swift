@@ -14,24 +14,21 @@ class WeatherViewController: UIViewController {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         layout.itemSize = CGSize(width: 100, height: 100)
-        
         return UICollectionView(frame: .zero, collectionViewLayout: layout)
     }()
     private var weatherView: WeatherView?
-    private let toggleButton = UIButton()
+    private let toggleButton = CustomToggleButton()
     private var selectedIndexPath: IndexPath?
     private let selectedCellColor = UIColor(red: 36.0/255.0, green: 24.0/255.0, blue: 56.0/255.0, alpha: 1.0)
     private var isDay = true {
         didSet {
             updateBackground()
-            updateToggleButtonImage()
             updateWeatherView()
         }
     }
     
     init() {
         super.init(nibName: nil, bundle: nil)
-        
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -67,14 +64,22 @@ class WeatherViewController: UIViewController {
     
     private func setupToggleButton() {
         toggleButton.translatesAutoresizingMaskIntoConstraints = false
-        toggleButton.addTarget(self, action: #selector(toggleButtonTapped(_:)), for: .touchUpInside)
-        updateToggleButtonImage()
+        toggleButton.toggleAction = { [weak self] in
+            self?.isDay.toggle()
+        }
         view.addSubview(toggleButton)
         
         let screenWidth = UIScreen.main.bounds.width
+        let buttonWidth: CGFloat
+        let buttonHeight: CGFloat
         
-        let buttonWidth = screenWidth * 0.2
-        let buttonHeight = buttonWidth / 1.8
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            buttonWidth = screenWidth * 0.1
+            buttonHeight = buttonWidth / 1.8
+        } else {
+            buttonWidth = screenWidth * 0.2
+            buttonHeight = buttonWidth / 1.8
+        }
         
         NSLayoutConstraint.activate([
             toggleButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -82,20 +87,6 @@ class WeatherViewController: UIViewController {
             toggleButton.widthAnchor.constraint(equalToConstant: buttonWidth),
             toggleButton.heightAnchor.constraint(equalToConstant: buttonHeight)
         ])
-    }
-    
-    private func updateToggleButtonImage() {
-        UIView.transition(with: toggleButton, duration: 0.1, options: .transitionCrossDissolve, animations: {
-            let image = self.isDay ? UIImage(named: "sun") : UIImage(named: "moon")
-            self.toggleButton.setImage(image, for: .normal)
-        }, completion: nil)
-    }
-    
-    @objc private func toggleButtonTapped(_ sender: UIButton) {
-        isDay.toggle()
-        
-        let generator = UIImpactFeedbackGenerator(style: .medium)
-        generator.impactOccurred()
     }
     
     private func updateBackground() {
